@@ -1,0 +1,96 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+<changeSet author="Evgeniy Koveshnikov" id="02">
+	<createTable remarks="Used to store party rooms"
+		tableName="party_room">
+		<column name="id" type="int" autoIncrement = "true">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="name" type="varchar(255)">
+			<constraints nullable="false" />
+		</column>
+	</createTable>
+
+	<createTable remarks="Friends"
+		tableName="friends">
+		<column name="id" type="int" autoIncrement = "true">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="e_mail" type="varchar(255)">
+			<constraints nullable="false" />
+		</column>
+		<column name="name" type="varchar(255)">
+			<constraints nullable="false" />
+		</column>
+		<column name="nick_name" type="varchar(255)">
+			<constraints nullable="true" />
+		</column>
+	</createTable>
+
+	<createTable remarks="Friends invite"
+		tableName="friends_invite">
+		<column name="id" type="int" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="friends_id" type="int">
+			<constraints nullable="false"
+				references = "friends"
+				foreignKeyName = "fk_friends_id(id)"
+				deleteCascade = "true"
+			/>
+		</column>
+		<column name="party_room_id" type="int">
+			<constraints nullable="false"
+				references = "party_room(id)"
+				foreignKeyName = "fk_room_id"
+				deleteCascade = "true"
+			/>
+		</column>
+	</createTable>
+
+	<createTable remarks="List of expenses"
+		tableName="expenses">
+		<column name="id" type="int" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="name" type="varchar(255)">
+			<constraints nullable="false" />
+		</column>
+		<column name="cost" type="int">
+			<constraints nullable="false"/>
+		</column>
+		<column name="col" type="int">
+			<constraints nullable="false"/>
+		</column>
+		<column name="amount" type="int">
+			<constraints nullable="false"/>
+		</column>
+	</createTable>
+
+	<createTable remarks="Expenses of party"
+		tableName="party_expenses">
+		<column name="id" type="int" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="expenses_id" type="int">
+			<constraints nullable="false"
+				references = "friends"
+				foreignKeyName = "fk_expenses_id(id)"
+				deleteCascade = "true"
+			/>
+		</column>
+		<column name="party_room_id" type="int">
+			<constraints nullable="false"
+				references = "party_room(id)"
+				foreignKeyName = "fk_expenses_room_id"
+				deleteCascade = "true"
+			/>
+		</column>
+	</createTable>
+
+</changeSet>
+
+</databaseChangeLog>
