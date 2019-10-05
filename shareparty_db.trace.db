@@ -72,3 +72,7 @@ INSERT INTO FRIENDS VALUES ('e.koveshnikov@mail.ru', 'evgeniy koveshnikov', 'sar
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "INSERT INTO PARTY_ROOM NAME[*] VALUES('PARTY HARD')"; ожидалось "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, FROM, TABLE, VALUES"
 Syntax error in SQL statement "INSERT INTO PARTY_ROOM NAME[*] VALUES('PARTY HARD')"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, FROM, TABLE, VALUES"; SQL statement:
 INSERT INTO PARTY_ROOM NAME VALUES('PARTY HARD') [42001-199]
+2019-10-05 21:15:33 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "DELETE*[*] FROM PARTY_ROOM"; ожидалось "identifier"
+Syntax error in SQL statement "DELETE*[*] FROM PARTY_ROOM"; expected "identifier"; SQL statement:
+DELETE* FROM PARTY_ROOM [42001-199]
