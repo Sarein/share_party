@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories("com.partymakers.shareparty.data.persistence")
-public class ConfigurePartyController {
+public class PartyRoomsController {
 
     @Bean
     PartyRoomRepository partyRoomRepository(JpaRepository repository)
