@@ -2,13 +2,14 @@ package com.partymakers.shareparty.domain.usecases.party.impl;
 
 import com.partymakers.shareparty.domain.entity.PartyRoom;
 import com.partymakers.shareparty.domain.usecases.party.CreatePartyRoom;
-import com.partymakers.shareparty.domain.usecases.port.PartyRoomRepository;
+
+import org.springframework.data.repository.CrudRepository;
 
 public class CreatePartyRoomImpl implements CreatePartyRoom {
 
-    private PartyRoomRepository repository;
+    private CrudRepository<PartyRoom, Long>  repository;
 
-    public CreatePartyRoomImpl(PartyRoomRepository repository) {
+    public CreatePartyRoomImpl(CrudRepository<PartyRoom, Long> repository) {
         this.repository = repository;
     }
 

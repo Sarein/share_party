@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class Friend {
-    final String firstName;
-    final String secondName;
+    final String name;
     final String nickName;
+    final String eMail;
 }

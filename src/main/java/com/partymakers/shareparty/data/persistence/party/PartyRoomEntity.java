@@ -1,4 +1,4 @@
-package com.partymakers.shareparty.data.persistence;
+package com.partymakers.shareparty.data.persistence.party;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

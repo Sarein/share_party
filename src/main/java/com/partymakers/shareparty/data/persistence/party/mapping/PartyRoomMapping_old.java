@@ -1,6 +1,6 @@
-package com.partymakers.shareparty.data.persistence.mapping;
+package com.partymakers.shareparty.data.persistence.party.mapping;
 
-import com.partymakers.shareparty.data.persistence.PartyRoomEntity;
+import com.partymakers.shareparty.data.persistence.party.PartyRoomEntity;
 import com.partymakers.shareparty.domain.entity.PartyRoom;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-public class PartyRoomMapping {
+public class PartyRoomMapping_old {
 
     public static PartyRoom  transform(@NotNull PartyRoomEntity partyRoomEntity) {
         return new PartyRoom(partyRoomEntity.getId(), partyRoomEntity.getName());
