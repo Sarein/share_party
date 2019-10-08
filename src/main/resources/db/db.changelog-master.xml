@@ -16,29 +16,26 @@
 
 	<createTable remarks="Friends"
 		tableName="friends">
-		<column name="id" type="int" autoIncrement = "true">
-			<constraints primaryKey="true" nullable="false" />
-		</column>
 		<column name="e_mail" type="varchar(255)">
-			<constraints nullable="false" />
+			<constraints nullable="true" />
 		</column>
 		<column name="name" type="varchar(255)">
 			<constraints nullable="false" />
 		</column>
 		<column name="nick_name" type="varchar(255)">
-			<constraints nullable="true" />
+			<constraints primaryKey="true" nullable="false" />
 		</column>
 	</createTable>
 
 	<createTable remarks="Friends invite"
 		tableName="friends_invite">
-		<column name="id" type="int" autoIncrement="true">
+		<column name="id" type="int" autoIncrement = "true">
 			<constraints primaryKey="true" nullable="false" />
 		</column>
-		<column name="friends_id" type="int">
+		<column name="friend_nick_name" type="varchar(255)">
 			<constraints nullable="false"
 				references = "friends"
-				foreignKeyName = "fk_friends_id(id)"
+				foreignKeyName = "fk_friends_nick_name(nick_name)"
 				deleteCascade = "true"
 			/>
 		</column>

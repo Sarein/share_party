@@ -9,8 +9,7 @@ import lombok.Setter;
 public class PartyRoom {
 
     @Getter
-    final int id;
-
+    final long id;
 
     @Getter
     final String  name;
@@ -30,7 +29,7 @@ public class PartyRoom {
         expenses  = new ArrayList<>();
     }
 
-    public PartyRoom(int id, String name){
+    public PartyRoom(long id, String name){
         this.id   = id;
         this.name = name;
         friends   = new ArrayList<>();

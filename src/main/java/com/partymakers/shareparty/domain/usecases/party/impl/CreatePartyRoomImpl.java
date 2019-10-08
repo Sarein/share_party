@@ -14,7 +14,7 @@ public class CreatePartyRoomImpl implements CreatePartyRoom {
     }
 
     @Override
-    public void createPartyRoom(PartyRoom room) {
-        repository.save(room);
+    public long createPartyRoom(PartyRoom room) {
+           return repository.save(room).getId();
     }
 }
