@@ -2,7 +2,7 @@ package com.partymakers.shareparty.data.persistence.party.mapping;
 
 import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;
-import com.partymakers.shareparty.data.persistence.party.PartyRoomEntity;
+import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity;
 import com.partymakers.shareparty.domain.entity.PartyRoom;
 
 public class PartyRoomMapping implements DomainMapper<PartyRoom, PartyRoomEntity>, PersistenceMapper<PartyRoomEntity, PartyRoom> {

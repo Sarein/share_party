@@ -4,17 +4,23 @@ import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;
 import com.partymakers.shareparty.data.persistence.RepositoryFacade;
 import com.partymakers.shareparty.data.persistence.party.InvitedFriendsPersistenceRepository;
-import com.partymakers.shareparty.data.persistence.party.PartyRoomEntity;
+import com.partymakers.shareparty.data.persistence.party.PartyExpensesEntityRepository;
+import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity;
+import com.partymakers.shareparty.data.persistence.party.impl.ExpensesRepositoryImpl;
 import com.partymakers.shareparty.data.persistence.party.impl.InvitedFriendsRepositoryImpl;
 import com.partymakers.shareparty.data.persistence.party.mapping.PartyRoomMapping;
 import com.partymakers.shareparty.domain.entity.PartyRoom;
+import com.partymakers.shareparty.domain.usecases.expenses.AddExpense;
+import com.partymakers.shareparty.domain.usecases.party.AddPartyExpense;
 import com.partymakers.shareparty.domain.usecases.party.CreatePartyRoom;
 import com.partymakers.shareparty.domain.usecases.party.InviteFriend;
 import com.partymakers.shareparty.domain.usecases.party.KickFiend;
+import com.partymakers.shareparty.domain.usecases.party.impl.AddPartyExpenseImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.CreatePartyRoomImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.InviteFriendImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.KickFiendImpl;
 import com.partymakers.shareparty.domain.usecases.party.port.InvitedFriendsRepository;
+import com.partymakers.shareparty.domain.usecases.party.port.PartyExpensesRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -69,5 +75,15 @@ public class PartyRoomsConfiguration {
         return new KickFiendImpl(invitedFriendsRepository(repository));
     }
 
+    @Bean
+    PartyExpensesRepository partyExpensesRepository(PartyExpensesEntityRepository repository) {
+        return new ExpensesRepositoryImpl(repository);
+    }
+
+    @Bean
+    AddPartyExpense addPartyExpense(@Autowired PartyExpensesEntityRepository partyExpensesRepository,
+                                    @Autowired AddExpense addExpenses){
+        return new AddPartyExpenseImpl(partyExpensesRepository(partyExpensesRepository), addExpenses);
+    }
 
 }

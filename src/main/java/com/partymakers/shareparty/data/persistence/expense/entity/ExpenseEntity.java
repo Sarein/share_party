@@ -1,25 +1,28 @@
-package com.partymakers.shareparty.data.persistence.party;
+package com.partymakers.shareparty.data.persistence.expense.entity;
+
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Entity
-@Table(name = "party_room")
 @Data
+@Table(name = "expenses")
 @AllArgsConstructor
-public class PartyRoomEntity {
-
+@Entity
+public class ExpenseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
-
     @Column(name = "name")
     private String name;
+    @Column(name = "cost")
+    private int    cost;
+    @Column(name = "count")
+    private double count;
 }

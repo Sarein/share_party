@@ -1,4 +1,4 @@
-package com.partymakers.shareparty.data.persistence.friends.entity.mapping;
+package com.partymakers.shareparty.data.persistence.friends.entity;
 
 import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;

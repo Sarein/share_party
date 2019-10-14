@@ -59,10 +59,7 @@
 		<column name="cost" type="int">
 			<constraints nullable="false"/>
 		</column>
-		<column name="col" type="int">
-			<constraints nullable="false"/>
-		</column>
-		<column name="amount" type="int">
+		<column name="count" type="double">
 			<constraints nullable="false"/>
 		</column>
 	</createTable>
@@ -74,8 +71,8 @@
 		</column>
 		<column name="expenses_id" type="int">
 			<constraints nullable="false"
-				references = "friends"
-				foreignKeyName = "fk_expenses_id(id)"
+				references = "expenses(id)"
+				foreignKeyName = "fk_expenses_id"
 				deleteCascade = "true"
 			/>
 		</column>

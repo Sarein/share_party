@@ -1,6 +1,9 @@
 package com.partymakers.shareparty.application.party;
 
+import com.partymakers.shareparty.application.party.dto.PartyExpense;
+import com.partymakers.shareparty.domain.entity.Expense;
 import com.partymakers.shareparty.domain.entity.PartyRoom;
+import com.partymakers.shareparty.domain.usecases.party.AddPartyExpense;
 import com.partymakers.shareparty.domain.usecases.party.InviteFriend;
 import com.partymakers.shareparty.domain.usecases.party.CreatePartyRoom;
 import com.partymakers.shareparty.domain.usecases.party.KickFiend;
@@ -33,6 +36,8 @@ public class PartyController extends V1Controller{
     private final InviteFriend inviteUseCase;
     @Autowired
     private final KickFiend kickUseCase;
+    @Autowired
+    private final AddPartyExpense partyExpense;
 
     @PostMapping("/parties")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
@@ -72,4 +77,14 @@ public class PartyController extends V1Controller{
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+
+    @PostMapping("/parties/{partyId}/expenses")
+    ResponseEntity<?> addPartyExpense(@PathVariable("partyId") Long partyId,
+                                      @RequestBody PartyExpense request) {
+
+        partyExpense.addPartyExpense(new Expense(request.getName(), request.getCost(), request.getCount()), partyId);
+
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
 }
+

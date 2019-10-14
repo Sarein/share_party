@@ -4,7 +4,7 @@ import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;
 import com.partymakers.shareparty.data.persistence.RepositoryFacade;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendEntity;
-import com.partymakers.shareparty.data.persistence.friends.entity.mapping.FriendMapping;
+import com.partymakers.shareparty.data.persistence.friends.entity.FriendMapping;
 import com.partymakers.shareparty.domain.entity.Friend;
 import com.partymakers.shareparty.domain.usecases.friends.RegisterFriend;
 import com.partymakers.shareparty.domain.usecases.friends.impl.RegisterFriendImpl;
