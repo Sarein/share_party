@@ -10,6 +10,7 @@ import com.partymakers.shareparty.domain.usecases.party.KickFiend;
 import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
 import com.partymakers.shareparty.application.party.dto.CreatePartyRoomRequest;
+import com.partymakers.shareparty.domain.usecases.party.RemovePartyExpense;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +39,8 @@ public class PartyController extends V1Controller{
     private final KickFiend kickUseCase;
     @Autowired
     private final AddPartyExpense partyExpense;
+    @Autowired
+    private final RemovePartyExpense removePartyExpense;
 
     @PostMapping("/parties")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
@@ -82,9 +85,29 @@ public class PartyController extends V1Controller{
     ResponseEntity<?> addPartyExpense(@PathVariable("partyId") Long partyId,
                                       @RequestBody PartyExpense request) {
 
-        partyExpense.addPartyExpense(new Expense(request.getName(), request.getCost(), request.getCount()), partyId);
+        URI creationLocation =
+            ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{partyId}")
+                .buildAndExpand(partyExpense.addPartyExpense(
+                    new Expense(request.getName(),
+                        request.getCost(),
+                        request.getCount()),
+                    partyId)).toUri();
 
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(creationLocation);
+
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/parties/{partyId}/expenses/{expenseId}")
+    ResponseEntity<?> removePartyExpense(@PathVariable("partyId")   Long partyId,
+                                         @PathVariable("expenseId") Long expenseId) {
+
+        removePartyExpense.removePartyExpense(expenseId, partyId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
 }
 

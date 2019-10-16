@@ -14,6 +14,6 @@ public class AddExpenseImpl implements AddExpense {
 
     @Override
     public Long addExpense(Expense expense) {
-        return repository.save(expense).getUId();
+        return repository.save(expense).getId();
     }
 }

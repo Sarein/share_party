@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Expense {
-    long uId;
-    final String name;
+    long   id;
+    final  String name;
     int    cost;
     double count;
 

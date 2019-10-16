@@ -15,10 +15,12 @@ import com.partymakers.shareparty.domain.usecases.party.AddPartyExpense;
 import com.partymakers.shareparty.domain.usecases.party.CreatePartyRoom;
 import com.partymakers.shareparty.domain.usecases.party.InviteFriend;
 import com.partymakers.shareparty.domain.usecases.party.KickFiend;
+import com.partymakers.shareparty.domain.usecases.party.RemovePartyExpense;
 import com.partymakers.shareparty.domain.usecases.party.impl.AddPartyExpenseImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.CreatePartyRoomImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.InviteFriendImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.KickFiendImpl;
+import com.partymakers.shareparty.domain.usecases.party.impl.RemovePartyExpenseImpl;
 import com.partymakers.shareparty.domain.usecases.party.port.InvitedFriendsRepository;
 import com.partymakers.shareparty.domain.usecases.party.port.PartyExpensesRepository;
 
@@ -85,5 +87,11 @@ public class PartyRoomsConfiguration {
                                     @Autowired AddExpense addExpenses){
         return new AddPartyExpenseImpl(partyExpensesRepository(partyExpensesRepository), addExpenses);
     }
+
+    @Bean
+    RemovePartyExpense removePartyExpense(@Autowired PartyExpensesEntityRepository partyExpensesRepository){
+        return new RemovePartyExpenseImpl(partyExpensesRepository(partyExpensesRepository));
+    }
+
 
 }

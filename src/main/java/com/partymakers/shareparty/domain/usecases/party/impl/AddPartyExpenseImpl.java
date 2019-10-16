@@ -14,7 +14,9 @@ public class AddPartyExpenseImpl implements AddPartyExpense {
     private final AddExpense expenses;
 
     @Override
-    public void addPartyExpense(Expense expense, long partyId) {
-        partyExpensesRepository.addExpense(expenses.addExpense(expense), partyId);
+    public long addPartyExpense(Expense expense, long partyId) {
+        long expenseId = expenses.addExpense(expense);
+        partyExpensesRepository.addExpense(expenseId, partyId);
+        return expenseId;
     }
 }

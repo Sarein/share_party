@@ -8,7 +8,7 @@ public class ExpenseMapping implements DomainMapper<Expense, ExpenseEntity>, Per
 
     @Override
     public ExpenseEntity toPersistence(Expense domainEntity) {
-        return new ExpenseEntity(domainEntity.getUId(),
+        return new ExpenseEntity(domainEntity.getId(),
             domainEntity.getName(),
             domainEntity.getCost(),
             domainEntity.getCount()
