@@ -2,8 +2,7 @@ package com.partymakers.shareparty.data.persistence.friends.entity;
 
 import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;
-import com.partymakers.shareparty.data.persistence.friends.entity.FriendEntity;
-import com.partymakers.shareparty.domain.entity.Friend;
+import com.partymakers.shareparty.domain.friends.entity.Friend;
 
 public class FriendMapping implements DomainMapper<Friend, FriendEntity>, PersistenceMapper<FriendEntity, Friend> {
 

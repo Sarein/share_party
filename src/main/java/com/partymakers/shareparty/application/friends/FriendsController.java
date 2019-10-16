@@ -1,7 +1,7 @@
 package com.partymakers.shareparty.application.friends;
 
-import com.partymakers.shareparty.domain.entity.Friend;
-import com.partymakers.shareparty.domain.usecases.friends.RegisterFriend;
+import com.partymakers.shareparty.domain.friends.entity.Friend;
+import com.partymakers.shareparty.domain.friends.usecase.RegisterFriend;
 import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.CreateFriendRequest;
 

@@ -5,9 +5,9 @@ import com.partymakers.shareparty.data.persistence.PersistenceMapper;
 import com.partymakers.shareparty.data.persistence.RepositoryFacade;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendEntity;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendMapping;
-import com.partymakers.shareparty.domain.entity.Friend;
-import com.partymakers.shareparty.domain.usecases.friends.RegisterFriend;
-import com.partymakers.shareparty.domain.usecases.friends.impl.RegisterFriendImpl;
+import com.partymakers.shareparty.domain.friends.entity.Friend;
+import com.partymakers.shareparty.domain.friends.usecase.RegisterFriend;
+import com.partymakers.shareparty.domain.friends.usecase.impl.RegisterFriendImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

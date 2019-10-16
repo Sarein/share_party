@@ -1,16 +1,16 @@
 package com.partymakers.shareparty.application.party;
 
 import com.partymakers.shareparty.application.party.dto.PartyExpense;
-import com.partymakers.shareparty.domain.entity.Expense;
-import com.partymakers.shareparty.domain.entity.PartyRoom;
-import com.partymakers.shareparty.domain.usecases.party.AddPartyExpense;
-import com.partymakers.shareparty.domain.usecases.party.InviteFriend;
-import com.partymakers.shareparty.domain.usecases.party.CreatePartyRoom;
-import com.partymakers.shareparty.domain.usecases.party.KickFiend;
+import com.partymakers.shareparty.domain.expenses.entity.Expense;
+import com.partymakers.shareparty.domain.party.entity.PartyRoom;
+import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
+import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
+import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
+import com.partymakers.shareparty.domain.party.usecase.KickFiend;
 import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
 import com.partymakers.shareparty.application.party.dto.CreatePartyRoomRequest;
-import com.partymakers.shareparty.domain.usecases.party.RemovePartyExpense;
+import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -42,7 +42,7 @@ public class PartyController extends V1Controller{
     @Autowired
     private final RemovePartyExpense removePartyExpense;
 
-    @PostMapping("/parties")
+    @PostMapping("/party")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
 
         URI creationLocation =
@@ -60,7 +60,7 @@ public class PartyController extends V1Controller{
     }
 
 
-    @PostMapping("/parties/{partyId}/friends")
+    @PostMapping("/party/{partyId}/friends")
     ResponseEntity<?> inviteFriendToParty(@PathVariable("partyId") Long partyId, @RequestBody InviteFriendRequest request) {
 
         try {
@@ -73,7 +73,7 @@ public class PartyController extends V1Controller{
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/parties/{partyId}/friends")
+    @DeleteMapping("/party/{partyId}/friends")
     ResponseEntity<?> kickFriend(@PathVariable("partyId") Long partyId, @RequestBody InviteFriendRequest request) {
 
         kickUseCase.kickFriend(request.getNickName(), partyId);
@@ -81,7 +81,7 @@ public class PartyController extends V1Controller{
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/parties/{partyId}/expenses")
+    @PostMapping("/party/{partyId}/expenses")
     ResponseEntity<?> addPartyExpense(@PathVariable("partyId") Long partyId,
                                       @RequestBody PartyExpense request) {
 
@@ -101,7 +101,7 @@ public class PartyController extends V1Controller{
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/parties/{partyId}/expenses/{expenseId}")
+    @DeleteMapping("/party/{partyId}/expenses/{expenseId}")
     ResponseEntity<?> removePartyExpense(@PathVariable("partyId")   Long partyId,
                                          @PathVariable("expenseId") Long expenseId) {
 

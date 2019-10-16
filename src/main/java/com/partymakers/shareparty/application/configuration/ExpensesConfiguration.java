@@ -6,9 +6,9 @@ import com.partymakers.shareparty.data.persistence.PersistenceMapper;
 import com.partymakers.shareparty.data.persistence.RepositoryFacade;
 import com.partymakers.shareparty.data.persistence.expense.entity.ExpenseEntity;
 import com.partymakers.shareparty.data.persistence.expense.entity.ExpenseMapping;
-import com.partymakers.shareparty.domain.entity.Expense;
-import com.partymakers.shareparty.domain.usecases.expenses.AddExpense;
-import com.partymakers.shareparty.domain.usecases.expenses.impl.AddExpenseImpl;
+import com.partymakers.shareparty.domain.expenses.entity.Expense;
+import com.partymakers.shareparty.domain.expenses.usecase.AddExpense;
+import com.partymakers.shareparty.domain.expenses.usecase.impl.AddExpenseImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
