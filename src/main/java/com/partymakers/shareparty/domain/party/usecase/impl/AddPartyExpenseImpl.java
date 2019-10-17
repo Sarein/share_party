@@ -1,4 +1,4 @@
-package com.partymakers.shareparty.domain.usecases.party.impl;
+package com.partymakers.shareparty.domain.party.usecase.impl;
 
 import com.partymakers.shareparty.domain.expenses.entity.Expense;
 import com.partymakers.shareparty.domain.expenses.usecase.AddExpense;
@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AddPartyExpenseImpl implements AddPartyExpense {
 
-    private final PartyExpensesRepository partyExpensesRepository;
+      private final PartyExpensesRepository partyExpensesRepository;
     private final AddExpense expenses;
 
     @Override

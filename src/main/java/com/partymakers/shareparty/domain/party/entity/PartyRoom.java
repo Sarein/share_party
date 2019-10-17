@@ -12,10 +12,7 @@ import lombok.Setter;
 public class PartyRoom {
 
     @Getter
-    final long id;
-
-    @Getter
-    final String  name;
+    final PartyRoomDescription description;
 
     @Getter
     @Setter
@@ -26,16 +23,14 @@ public class PartyRoom {
     List<Expense> expenses;
 
     public PartyRoom(String name){
-        id = 0;
-        this.name = name;
-        friends   = new ArrayList<>();
-        expenses  = new ArrayList<>();
+        description = new PartyRoomDescription(0, name);
+        friends     = new ArrayList<>();
+        expenses    = new ArrayList<>();
     }
 
     public PartyRoom(long id, String name){
-        this.id   = id;
-        this.name = name;
-        friends   = new ArrayList<>();
-        expenses  = new ArrayList<>();
+        description = new PartyRoomDescription(id, name);
+        friends     = new ArrayList<>();
+        expenses    = new ArrayList<>();
     }
 }

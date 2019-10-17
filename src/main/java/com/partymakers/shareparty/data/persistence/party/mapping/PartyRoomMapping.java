@@ -4,15 +4,16 @@ import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;
 import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity;
 import com.partymakers.shareparty.domain.party.entity.PartyRoom;
+import com.partymakers.shareparty.domain.party.entity.PartyRoomDescription;
 
-public class PartyRoomMapping implements DomainMapper<PartyRoom, PartyRoomEntity>, PersistenceMapper<PartyRoomEntity, PartyRoom> {
+public class PartyRoomMapping implements DomainMapper<PartyRoomDescription, PartyRoomEntity>, PersistenceMapper<PartyRoomEntity, PartyRoomDescription> {
     @Override
-    public PartyRoomEntity toPersistence(PartyRoom domainEntity) {
+    public PartyRoomEntity toPersistence(PartyRoomDescription domainEntity) {
         return new PartyRoomEntity(domainEntity.getId(), domainEntity.getName());
     }
 
     @Override
-    public PartyRoom toDomain(PartyRoomEntity persistenceEntity) {
-        return new PartyRoom(persistenceEntity.getId(), persistenceEntity.getName());
+    public PartyRoomDescription toDomain(PartyRoomEntity persistenceEntity) {
+        return new PartyRoomDescription(persistenceEntity.getId(), persistenceEntity.getName());
     }
 }

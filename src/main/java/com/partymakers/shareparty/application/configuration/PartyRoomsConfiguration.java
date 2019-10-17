@@ -9,18 +9,20 @@ import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity;
 import com.partymakers.shareparty.data.persistence.party.impl.ExpensesRepositoryImpl;
 import com.partymakers.shareparty.data.persistence.party.impl.InvitedFriendsRepositoryImpl;
 import com.partymakers.shareparty.data.persistence.party.mapping.PartyRoomMapping;
-import com.partymakers.shareparty.domain.party.entity.PartyRoom;
 import com.partymakers.shareparty.domain.expenses.usecase.AddExpense;
+import com.partymakers.shareparty.domain.party.entity.PartyRoomDescription;
 import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
 import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
+import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
 import com.partymakers.shareparty.domain.party.usecase.KickFiend;
 import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
-import com.partymakers.shareparty.domain.usecases.party.impl.AddPartyExpenseImpl;
-import com.partymakers.shareparty.domain.usecases.party.impl.CreatePartyRoomImpl;
-import com.partymakers.shareparty.domain.usecases.party.impl.InviteFriendImpl;
+import com.partymakers.shareparty.domain.party.usecase.impl.AddPartyExpenseImpl;
+import com.partymakers.shareparty.domain.party.usecase.impl.CreatePartyRoomImpl;
+import com.partymakers.shareparty.domain.party.usecase.impl.GetPartiesListImpl;
+import com.partymakers.shareparty.domain.party.usecase.impl.InviteFriendImpl;
+import com.partymakers.shareparty.domain.party.usecase.impl.RemovePartyExpenseImpl;
 import com.partymakers.shareparty.domain.usecases.party.impl.KickFiendImpl;
-import com.partymakers.shareparty.domain.usecases.party.impl.RemovePartyExpenseImpl;
 import com.partymakers.shareparty.domain.usecases.party.port.InvitedFriendsRepository;
 import com.partymakers.shareparty.domain.usecases.party.port.PartyExpensesRepository;
 
@@ -38,21 +40,21 @@ public class PartyRoomsConfiguration {
     static final PartyRoomMapping partyRoomMapping =  new PartyRoomMapping();
 
     @Bean
-    PersistenceMapper<PartyRoomEntity, PartyRoom> partyPersistenceMapper()
+    PersistenceMapper<PartyRoomEntity, PartyRoomDescription> partyPersistenceMapper()
     {
         return partyRoomMapping;
     }
 
     @Bean
-    DomainMapper<PartyRoom, PartyRoomEntity> partyDomainMapper()
+    DomainMapper<PartyRoomDescription, PartyRoomEntity> partyDomainMapper()
     {
         return partyRoomMapping;
     }
 
     @Bean
-    CrudRepository<PartyRoom, Long> partyRoomRepository(JpaRepository<PartyRoomEntity, Long> repository)
+    CrudRepository<PartyRoomDescription, Long> partyRoomRepository(JpaRepository<PartyRoomEntity, Long> repository)
     {
-        return new RepositoryFacade<PartyRoom, PartyRoomEntity, Long>(repository, partyDomainMapper(), partyPersistenceMapper());
+        return new RepositoryFacade<>(repository, partyDomainMapper(), partyPersistenceMapper());
     }
 
     @Bean
@@ -93,5 +95,9 @@ public class PartyRoomsConfiguration {
         return new RemovePartyExpenseImpl(partyExpensesRepository(partyExpensesRepository));
     }
 
+    @Bean
+    GetPartiesList getPartyRoomList(@Autowired JpaRepository<PartyRoomEntity, Long> repository) {
+        return new GetPartiesListImpl(partyRoomRepository(repository));
+    }
 
 }

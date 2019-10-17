@@ -1,15 +1,16 @@
 package com.partymakers.shareparty.application.party;
 
-import com.partymakers.shareparty.application.party.dto.PartyExpense;
-import com.partymakers.shareparty.domain.expenses.entity.Expense;
-import com.partymakers.shareparty.domain.party.entity.PartyRoom;
-import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
-import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
-import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
-import com.partymakers.shareparty.domain.party.usecase.KickFiend;
 import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
 import com.partymakers.shareparty.application.party.dto.CreatePartyRoomRequest;
+import com.partymakers.shareparty.application.party.dto.PartyExpense;
+import com.partymakers.shareparty.domain.expenses.entity.Expense;
+import com.partymakers.shareparty.domain.party.entity.PartyRoomDescription;
+import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
+import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
+import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
+import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
+import com.partymakers.shareparty.domain.party.usecase.KickFiend;
 import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +44,8 @@ public class PartyController extends V1Controller{
     private final AddPartyExpense partyExpense;
     @Autowired
     private final RemovePartyExpense removePartyExpense;
+    @Autowired
+    private final GetPartiesList getPartiesList;
 
     @PostMapping("/party")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
@@ -50,13 +55,19 @@ public class PartyController extends V1Controller{
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(
-                    createPartyRoom.createPartyRoom(new PartyRoom(request.getName())))
+                    createPartyRoom.createPartyRoom(new PartyRoomDescription(request.getName())))
             .toUri();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(creationLocation);
 
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/party")
+    public ResponseEntity<?> getPartiesRoom(){
+
+        return new ResponseEntity<>(getPartiesList.getPartyList(), HttpStatus.OK);
     }
 
 
@@ -108,6 +119,5 @@ public class PartyController extends V1Controller{
         removePartyExpense.removePartyExpense(expenseId, partyId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-
 }
 

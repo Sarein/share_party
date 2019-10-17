@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 @Entity
@@ -22,4 +23,7 @@ public class PartyRoomEntity {
 
     @Column(name = "name")
     private String name;
+
+    public PartyRoomEntity() {
+    }
 }

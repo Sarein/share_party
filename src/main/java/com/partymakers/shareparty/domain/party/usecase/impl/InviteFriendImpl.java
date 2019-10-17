@@ -1,4 +1,4 @@
-package com.partymakers.shareparty.domain.usecases.party.impl;
+package com.partymakers.shareparty.domain.party.usecase.impl;
 
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
 import com.partymakers.shareparty.domain.usecases.party.port.InvitedFriendsRepository;

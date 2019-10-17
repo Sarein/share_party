@@ -1,0 +1,18 @@
+package com.partymakers.shareparty.domain.party.entity;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public class PartyRoomDescription {
+    @Getter
+    final long id;
+
+    @Getter
+    final String name;
+
+    public PartyRoomDescription(String name) {
+        id = 0;
+        this.name = name;
+    }
+}
