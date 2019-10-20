@@ -1,9 +1,9 @@
 package com.partymakers.shareparty.application.configuration;
 
 
-import com.partymakers.shareparty.data.persistence.DomainMapper;
-import com.partymakers.shareparty.data.persistence.PersistenceMapper;
-import com.partymakers.shareparty.data.persistence.RepositoryFacade;
+import com.partymakers.shareparty.data.persistence.helper.DomainMapper;
+import com.partymakers.shareparty.data.persistence.helper.PersistenceMapper;
+import com.partymakers.shareparty.data.persistence.helper.RepositoryFacade;
 import com.partymakers.shareparty.data.persistence.expense.entity.ExpenseEntity;
 import com.partymakers.shareparty.data.persistence.expense.entity.ExpenseMapping;
 import com.partymakers.shareparty.domain.expenses.entity.Expense;

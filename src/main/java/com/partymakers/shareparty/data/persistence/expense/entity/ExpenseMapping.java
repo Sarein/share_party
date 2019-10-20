@@ -1,7 +1,7 @@
 package com.partymakers.shareparty.data.persistence.expense.entity;
 
-import com.partymakers.shareparty.data.persistence.DomainMapper;
-import com.partymakers.shareparty.data.persistence.PersistenceMapper;
+import com.partymakers.shareparty.data.persistence.helper.DomainMapper;
+import com.partymakers.shareparty.data.persistence.helper.PersistenceMapper;
 import com.partymakers.shareparty.domain.expenses.entity.Expense;
 
 public class ExpenseMapping implements DomainMapper<Expense, ExpenseEntity>, PersistenceMapper<ExpenseEntity, Expense> {

@@ -1,4 +1,4 @@
-package com.partymakers.shareparty.data.persistence;
+package com.partymakers.shareparty.data.persistence.helper;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;

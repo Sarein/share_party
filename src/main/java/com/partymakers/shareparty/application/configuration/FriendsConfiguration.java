@@ -1,7 +1,7 @@
 package com.partymakers.shareparty.application.configuration;
 
-import com.partymakers.shareparty.data.persistence.DomainMapper;
-import com.partymakers.shareparty.data.persistence.PersistenceMapper;
+import com.partymakers.shareparty.data.persistence.helper.DomainMapper;
+import com.partymakers.shareparty.data.persistence.helper.PersistenceMapper;
 import com.partymakers.shareparty.data.persistence.friends.FriendPersistenceRepository;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendEntity;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendMapping;
