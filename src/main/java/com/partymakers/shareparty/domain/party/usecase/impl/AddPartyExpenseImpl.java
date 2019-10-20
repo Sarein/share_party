@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AddPartyExpenseImpl implements AddPartyExpense {
 
-      private final PartyExpensesRepository partyExpensesRepository;
+    private final PartyExpensesRepository partyExpensesRepository;
     private final AddExpense expenses;
 
     @Override

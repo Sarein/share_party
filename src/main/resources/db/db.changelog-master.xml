@@ -28,22 +28,22 @@
 	</createTable>
 
 	<createTable remarks="Friends invite"
-		tableName="friends_invite">
-		<column name="id" type="int" autoIncrement = "true">
-			<constraints primaryKey="true" nullable="false" />
+		tableName="partyroom_friends">
+		<column name="partyroom_id" type="int">
+			<constraints nullable="false"
+				references = "party_room(id)"
+				foreignKeyName = "fk_room_id"
+				deleteCascade = "true"
+				primaryKey="true"
+			/>
 		</column>
+
 		<column name="friend_nick_name" type="varchar(255)">
 			<constraints nullable="false"
 				references = "friends"
 				foreignKeyName = "fk_friends_nick_name(nick_name)"
 				deleteCascade = "true"
-			/>
-		</column>
-		<column name="party_room_id" type="int">
-			<constraints nullable="false"
-				references = "party_room(id)"
-				foreignKeyName = "fk_room_id"
-				deleteCascade = "true"
+				primaryKey="true"
 			/>
 		</column>
 	</createTable>
@@ -84,7 +84,6 @@
 			/>
 		</column>
 	</createTable>
-
 </changeSet>
 
 </databaseChangeLog>

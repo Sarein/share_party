@@ -1,17 +1,22 @@
-package com.partymakers.shareparty.domain.usecases.party.impl;
+package com.partymakers.shareparty.domain.party.usecase.impl;
 
+import com.partymakers.shareparty.domain.party.entity.PartyRoom;
+import com.partymakers.shareparty.domain.party.port.PartyRoomRepository;
 import com.partymakers.shareparty.domain.party.usecase.KickFiend;
-import com.partymakers.shareparty.domain.usecases.party.port.InvitedFriendsRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class KickFiendImpl implements KickFiend {
 
-    private final InvitedFriendsRepository repository;
+    private final PartyRoomRepository partyRoomRepository;
 
     @Override
     public void kickFriend(String nickName, long partyId) {
-        repository.deleteFriend(nickName, partyId);
+        PartyRoom room = partyRoomRepository.findById(partyId);
+        //TODO: add checking that`s friend not null or friendlist empty
+
+        room.getFriends().removeIf(friend -> friend.getNickName().equalsIgnoreCase(nickName));
+        partyRoomRepository.save(room);
     }
 }

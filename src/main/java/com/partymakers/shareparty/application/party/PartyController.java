@@ -3,12 +3,14 @@ package com.partymakers.shareparty.application.party;
 import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
 import com.partymakers.shareparty.application.party.dto.CreatePartyRoomRequest;
+import com.partymakers.shareparty.application.party.dto.PartiesResponse;
 import com.partymakers.shareparty.application.party.dto.PartyExpense;
+import com.partymakers.shareparty.application.party.dto.PartyFriendsResponse;
 import com.partymakers.shareparty.domain.expenses.entity.Expense;
-import com.partymakers.shareparty.domain.party.entity.PartyRoomDescription;
 import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
 import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
 import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
+import com.partymakers.shareparty.domain.party.usecase.GetPartyFriends;
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
 import com.partymakers.shareparty.domain.party.usecase.KickFiend;
 import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +47,8 @@ public class PartyController extends V1Controller{
     private final RemovePartyExpense removePartyExpense;
     @Autowired
     private final GetPartiesList getPartiesList;
+    @Autowired
+    private final GetPartyFriends getPartyFriends;
 
     @PostMapping("/party")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
@@ -55,7 +58,7 @@ public class PartyController extends V1Controller{
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(
-                    createPartyRoom.createPartyRoom(new PartyRoomDescription(request.getName())))
+                    createPartyRoom.createPartyRoom(request.getName()))
             .toUri();
 
         HttpHeaders headers = new HttpHeaders();
@@ -66,8 +69,7 @@ public class PartyController extends V1Controller{
 
     @GetMapping("/party")
     public ResponseEntity<?> getPartiesRoom(){
-
-        return new ResponseEntity<>(getPartiesList.getPartyList(), HttpStatus.OK);
+        return new ResponseEntity<>(new PartiesResponse(getPartiesList.getPartyList()), HttpStatus.OK);
     }
 
 
@@ -82,6 +84,11 @@ public class PartyController extends V1Controller{
         }
 
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @GetMapping("/party/{partyId}/friends")
+    ResponseEntity<?> getPartyFriend(@PathVariable("partyId") Long partyId) {
+        return new ResponseEntity<>(new PartyFriendsResponse(getPartyFriends.getPartyFriends(partyId)), HttpStatus.OK);
     }
 
     @DeleteMapping("/party/{partyId}/friends")

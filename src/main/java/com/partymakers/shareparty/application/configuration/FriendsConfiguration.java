@@ -2,19 +2,19 @@ package com.partymakers.shareparty.application.configuration;
 
 import com.partymakers.shareparty.data.persistence.DomainMapper;
 import com.partymakers.shareparty.data.persistence.PersistenceMapper;
-import com.partymakers.shareparty.data.persistence.RepositoryFacade;
+import com.partymakers.shareparty.data.persistence.friends.FriendPersistenceRepository;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendEntity;
 import com.partymakers.shareparty.data.persistence.friends.entity.FriendMapping;
+import com.partymakers.shareparty.data.persistence.friends.impl.FriendsRepositoryImpl;
 import com.partymakers.shareparty.domain.friends.entity.Friend;
+import com.partymakers.shareparty.domain.friends.port.FriendsRepository;
 import com.partymakers.shareparty.domain.friends.usecase.RegisterFriend;
 import com.partymakers.shareparty.domain.friends.usecase.impl.RegisterFriendImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.repository.CrudRepository;
 
 @Configuration
 @EnableJpaRepositories("com.partymakers.shareparty.data.persistence.friends")
@@ -35,13 +35,13 @@ public class FriendsConfiguration {
     }
 
     @Bean
-    CrudRepository<Friend, String> friendsRepository(JpaRepository<FriendEntity, String> repository)
+    FriendsRepository friendsRepository(FriendPersistenceRepository repository)
     {
-        return new RepositoryFacade<>(repository, friendsDomainMapper(), friendsPersistenceMapper());
+        return new FriendsRepositoryImpl(repository);
     }
 
     @Bean
-    RegisterFriend registerFriend(@Autowired JpaRepository<FriendEntity, String> repository)
+    RegisterFriend registerFriend(@Autowired FriendPersistenceRepository repository)
     {
         return new RegisterFriendImpl(friendsRepository(repository));
     }

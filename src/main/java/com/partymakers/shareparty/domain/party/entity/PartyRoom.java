@@ -4,7 +4,9 @@ import com.partymakers.shareparty.domain.expenses.entity.Expense;
 import com.partymakers.shareparty.domain.friends.entity.Friend;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,21 +18,29 @@ public class PartyRoom {
 
     @Getter
     @Setter
-    List<Friend>  friends;
+    //many-to-many
+    Set<Friend> friends;
 
     @Getter
     @Setter
-    List<Expense> expenses;
+    //many-to-one
+    Set<Expense> expenses;
 
     public PartyRoom(String name){
         description = new PartyRoomDescription(0, name);
-        friends     = new ArrayList<>();
-        expenses    = new ArrayList<>();
+        friends     = new HashSet<>();
+        expenses    = new HashSet<>();
+    }
+
+    public PartyRoom(long id, String name, Set<Friend>  friends){
+        description = new PartyRoomDescription(id, name);
+        this.friends     = friends;
+        this.expenses    = new HashSet<>();
     }
 
     public PartyRoom(long id, String name){
         description = new PartyRoomDescription(id, name);
-        friends     = new ArrayList<>();
-        expenses    = new ArrayList<>();
+        friends     = new HashSet<>();
+        expenses    = new HashSet<>();
     }
 }
