@@ -3,10 +3,10 @@
                 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-<changeSet author="Evgeniy Koveshnikov" id="02">
+<changeSet author="Evgeniy Koveshnikov" id="03">
 	<createTable remarks="Used to store party rooms"
 		tableName="party_room">
-		<column name="id" type="int" autoIncrement = "true">
+		<column name="room_id" type="int" autoIncrement = "true">
 			<constraints primaryKey="true" nullable="false" />
 		</column>
 		<column name="name" type="varchar(255)">
@@ -31,7 +31,7 @@
 		tableName="partyroom_friends">
 		<column name="partyroom_id" type="int">
 			<constraints nullable="false"
-				references = "party_room(id)"
+				references = "party_room(room_id)"
 				foreignKeyName = "fk_room_id"
 				deleteCascade = "true"
 				primaryKey="true"
@@ -50,7 +50,7 @@
 
 	<createTable remarks="List of expenses"
 		tableName="expenses">
-		<column name="id" type="int" autoIncrement="true">
+		<column name="expense_id" type="int" autoIncrement="true">
 			<constraints primaryKey="true" nullable="false" />
 		</column>
 		<column name="name" type="varchar(255)">
@@ -61,27 +61,6 @@
 		</column>
 		<column name="count" type="double">
 			<constraints nullable="false"/>
-		</column>
-	</createTable>
-
-	<createTable remarks="Expenses of party"
-		tableName="party_expenses">
-		<column name="id" type="int" autoIncrement="true">
-			<constraints primaryKey="true" nullable="false" />
-		</column>
-		<column name="expenses_id" type="int">
-			<constraints nullable="false"
-				references = "expenses(id)"
-				foreignKeyName = "fk_expenses_id"
-				deleteCascade = "true"
-			/>
-		</column>
-		<column name="party_room_id" type="int">
-			<constraints nullable="false"
-				references = "party_room(id)"
-				foreignKeyName = "fk_expenses_room_id"
-				deleteCascade = "true"
-			/>
 		</column>
 	</createTable>
 </changeSet>

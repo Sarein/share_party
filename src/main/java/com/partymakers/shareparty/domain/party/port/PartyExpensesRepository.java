@@ -1,6 +1,6 @@
 package com.partymakers.shareparty.domain.usecases.party.port;
 
-import com.partymakers.shareparty.domain.expenses.entity.Expense;
+import com.partymakers.shareparty.domain.party.entity.Expense;
 
 public interface PartyExpensesRepository {
     void addExpense(long expenseUid, long partyRoom);

@@ -4,16 +4,17 @@ import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
 import com.partymakers.shareparty.application.party.dto.CreatePartyRoomRequest;
 import com.partymakers.shareparty.application.party.dto.PartiesResponse;
-import com.partymakers.shareparty.application.party.dto.PartyExpense;
+import com.partymakers.shareparty.application.party.dto.PartyExpenseRequest;
+import com.partymakers.shareparty.application.party.dto.PartyExpensesResponse;
 import com.partymakers.shareparty.application.party.dto.PartyFriendsResponse;
-import com.partymakers.shareparty.domain.expenses.entity.Expense;
+import com.partymakers.shareparty.domain.party.entity.Expense;
 import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
 import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
 import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
+import com.partymakers.shareparty.domain.party.usecase.GetPartyExpenses;
 import com.partymakers.shareparty.domain.party.usecase.GetPartyFriends;
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
 import com.partymakers.shareparty.domain.party.usecase.KickFiend;
-import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,11 +45,11 @@ public class PartyController extends V1Controller{
     @Autowired
     private final AddPartyExpense partyExpense;
     @Autowired
-    private final RemovePartyExpense removePartyExpense;
-    @Autowired
     private final GetPartiesList getPartiesList;
     @Autowired
     private final GetPartyFriends getPartyFriends;
+    @Autowired
+    private final GetPartyExpenses getPartyExpenses;
 
     @PostMapping("/party")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
@@ -99,31 +100,30 @@ public class PartyController extends V1Controller{
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/party/{partyId}/expenses")
+    @PostMapping("/party/{partyId}/expense")
     ResponseEntity<?> addPartyExpense(@PathVariable("partyId") Long partyId,
-                                      @RequestBody PartyExpense request) {
+                                      @RequestBody PartyExpenseRequest request) {
+        partyExpense.addPartyExpense(
+            new Expense(request.getName(),
+                request.getCost(),
+                request.getCount()),partyId);
 
-        URI creationLocation =
-            ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{partyId}")
-                .buildAndExpand(partyExpense.addPartyExpense(
-                    new Expense(request.getName(),
-                        request.getCost(),
-                        request.getCount()),
-                    partyId)).toUri();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(creationLocation);
-
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/party/{partyId}/expenses/{expenseId}")
+    @GetMapping("/party/{partyId}/expense")
+    ResponseEntity<?> getPartyExpenses(@PathVariable("partyId") Long partyId) {
+
+        return new ResponseEntity<>(
+            new PartyExpensesResponse(getPartyExpenses.getPartyExpenses(partyId)),
+            HttpStatus.OK);
+    }
+
+    @DeleteMapping("/party/{partyId}/expense/{expenseId}")
     ResponseEntity<?> removePartyExpense(@PathVariable("partyId")   Long partyId,
                                          @PathVariable("expenseId") Long expenseId) {
 
-        removePartyExpense.removePartyExpense(expenseId, partyId);
+
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

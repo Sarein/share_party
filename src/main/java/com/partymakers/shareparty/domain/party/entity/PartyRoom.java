@@ -1,6 +1,5 @@
 package com.partymakers.shareparty.domain.party.entity;
 
-import com.partymakers.shareparty.domain.expenses.entity.Expense;
 import com.partymakers.shareparty.domain.friends.entity.Friend;
 
 import java.util.ArrayList;
@@ -23,24 +22,24 @@ public class PartyRoom {
 
     @Getter
     @Setter
-    //many-to-one
-    Set<Expense> expenses;
+    //one-to-many
+    List<Expense> expenses;
 
     public PartyRoom(String name){
-        description = new PartyRoomDescription(0, name);
+        description = new PartyRoomDescription(0L, name);
         friends     = new HashSet<>();
-        expenses    = new HashSet<>();
+        expenses    = new ArrayList<>();
     }
 
-    public PartyRoom(long id, String name, Set<Friend>  friends){
+    public PartyRoom(long id, String name, Set<Friend>  friends, List<Expense> expenses){
         description = new PartyRoomDescription(id, name);
         this.friends     = friends;
-        this.expenses    = new HashSet<>();
+        this.expenses    = expenses;
     }
 
     public PartyRoom(long id, String name){
         description = new PartyRoomDescription(id, name);
         friends     = new HashSet<>();
-        expenses    = new HashSet<>();
+        expenses    = new ArrayList<>();
     }
 }

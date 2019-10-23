@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(of ={"id", "name"})
 public class PartyRoomDescription {
     @Getter
-    final long id;
+    final Long id;
 
     @Getter
     final String name;
 
     public PartyRoomDescription(String name) {
-        id = 0;
+        this.id=0L;
         this.name = name;
     }
 }
