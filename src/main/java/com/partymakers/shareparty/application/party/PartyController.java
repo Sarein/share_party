@@ -11,10 +11,12 @@ import com.partymakers.shareparty.domain.party.entity.Expense;
 import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
 import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
 import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
+import com.partymakers.shareparty.domain.party.usecase.GetParty;
 import com.partymakers.shareparty.domain.party.usecase.GetPartyExpenses;
 import com.partymakers.shareparty.domain.party.usecase.GetPartyFriends;
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
 import com.partymakers.shareparty.domain.party.usecase.KickFiend;
+import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,6 +52,10 @@ public class PartyController extends V1Controller{
     private final GetPartyFriends getPartyFriends;
     @Autowired
     private final GetPartyExpenses getPartyExpenses;
+    @Autowired
+    private final RemovePartyExpense removePartyExpense;
+    @Autowired
+    private final GetParty getParty;
 
     @PostMapping("/party")
     public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
@@ -119,12 +125,21 @@ public class PartyController extends V1Controller{
             HttpStatus.OK);
     }
 
-    @DeleteMapping("/party/{partyId}/expense/{expenseId}")
+    @DeleteMapping("/party/{partyId}/expense")
     ResponseEntity<?> removePartyExpense(@PathVariable("partyId")   Long partyId,
-                                         @PathVariable("expenseId") Long expenseId) {
+                                         @RequestBody PartyExpenseRequest request) {
 
+        removePartyExpense.removePartyExpense(partyId, new Expense(
+                                                request.getName(),
+                                                request.getCost(),
+                                                request.getCount()));
 
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @GetMapping("/party/{partyId}")
+    ResponseEntity<?> getParty(@PathVariable("partyId") Long partyId) {
+        return new ResponseEntity<>(getParty.getParty(partyId), HttpStatus.OK);
     }
 }
 

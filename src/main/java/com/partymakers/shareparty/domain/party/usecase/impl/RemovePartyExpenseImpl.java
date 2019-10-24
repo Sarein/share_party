@@ -13,9 +13,7 @@ public class RemovePartyExpenseImpl implements RemovePartyExpense {
     private final PartyRoomRepository partyExpensesRepository;
 
     @Override
-    public void removePartyExpense(Expense expense, long partyId) {
-        //TODO: удалять из  таблички с расходами, но нужно-ли?
-
+    public void removePartyExpense(Long partyId, Expense expense) {
         PartyRoom partyRoom = partyExpensesRepository.findById(partyId);
         partyRoom.getExpenses().removeIf(partyExpense -> partyExpense.equals(expense));
         partyExpensesRepository.save(partyRoom);
