@@ -1,18 +1,23 @@
 package com.partymakers.shareparty.domain.party.usecase.impl;
 
+import com.partymakers.shareparty.domain.party.entity.Expense;
+import com.partymakers.shareparty.domain.party.entity.PartyRoom;
+import com.partymakers.shareparty.domain.party.port.PartyRoomRepository;
 import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
-import com.partymakers.shareparty.domain.usecases.party.port.PartyExpensesRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class RemovePartyExpenseImpl implements RemovePartyExpense {
 
-    private final PartyExpensesRepository partyExpensesRepository;
+    private final PartyRoomRepository partyExpensesRepository;
 
     @Override
-    public void removePartyExpense(long expenseId, long partyId) {
+    public void removePartyExpense(Expense expense, long partyId) {
         //TODO: удалять из  таблички с расходами, но нужно-ли?
-        partyExpensesRepository.deleteExpense(expenseId, partyId);
+
+        PartyRoom partyRoom = partyExpensesRepository.findById(partyId);
+        partyRoom.getExpenses().removeIf(partyExpense -> partyExpense.equals(expense));
+        partyExpensesRepository.save(partyRoom);
     }
 }
