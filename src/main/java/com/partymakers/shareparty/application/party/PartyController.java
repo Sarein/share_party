@@ -2,12 +2,12 @@ package com.partymakers.shareparty.application.party;
 
 import com.partymakers.shareparty.application.V1Controller;
 import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
-import com.partymakers.shareparty.application.party.dto.CreatePartyRoomRequest;
-import com.partymakers.shareparty.application.party.dto.PartiesResponse;
-import com.partymakers.shareparty.application.party.dto.PartyExpenseRequest;
-import com.partymakers.shareparty.application.party.dto.PartyExpensesResponse;
-import com.partymakers.shareparty.application.party.dto.PartyFriendsResponse;
-import com.partymakers.shareparty.domain.party.entity.Expense;
+import com.partymakers.shareparty.application.party.dto.PartyRoomDescription;
+import com.partymakers.shareparty.application.party.dto.FullPartyInfo;
+import com.partymakers.shareparty.application.party.dto.Parties;
+import com.partymakers.shareparty.application.party.dto.Expense;
+import com.partymakers.shareparty.application.party.dto.PartyExpenses;
+import com.partymakers.shareparty.application.party.dto.PartyFriends;
 import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
 import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
 import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
@@ -32,6 +32,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -58,7 +60,8 @@ public class PartyController extends V1Controller{
     private final GetParty getParty;
 
     @PostMapping("/party")
-    public ResponseEntity<?> createPartyRoom(@RequestBody CreatePartyRoomRequest request){
+    @ApiOperation(value = "Creates new the party room")
+    public ResponseEntity<?> createPartyRoom(@RequestBody PartyRoomDescription request){
 
         URI creationLocation =
             ServletUriComponentsBuilder
@@ -75,12 +78,14 @@ public class PartyController extends V1Controller{
     }
 
     @GetMapping("/party")
+    @ApiOperation(value = "Returns list of existing party rooms", response = Parties.class)
     public ResponseEntity<?> getPartiesRoom(){
-        return new ResponseEntity<>(new PartiesResponse(getPartiesList.getPartyList()), HttpStatus.OK);
+        return new ResponseEntity<>(new Parties(getPartiesList.getPartyList()), HttpStatus.OK);
     }
 
 
-    @PostMapping("/party/{partyId}/friends")
+    @PostMapping("/party/{partyId}/friend")
+    @ApiOperation(value = "Invites friends to the party")
     ResponseEntity<?> inviteFriendToParty(@PathVariable("partyId") Long partyId, @RequestBody InviteFriendRequest request) {
 
         try {
@@ -93,12 +98,14 @@ public class PartyController extends V1Controller{
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @GetMapping("/party/{partyId}/friends")
+    @GetMapping("/party/{partyId}/friend")
+    @ApiOperation(value = "Returns friends of the party", response = PartyFriends.class)
     ResponseEntity<?> getPartyFriend(@PathVariable("partyId") Long partyId) {
-        return new ResponseEntity<>(new PartyFriendsResponse(getPartyFriends.getPartyFriends(partyId)), HttpStatus.OK);
+        return new ResponseEntity<>(new PartyFriends(getPartyFriends.getPartyFriends(partyId)), HttpStatus.OK);
     }
 
-    @DeleteMapping("/party/{partyId}/friends")
+    @DeleteMapping("/party/{partyId}/friend")
+    @ApiOperation(value = "Removes friend from the party")
     ResponseEntity<?> kickFriend(@PathVariable("partyId") Long partyId, @RequestBody InviteFriendRequest request) {
 
         kickUseCase.kickFriend(request.getNickName(), partyId);
@@ -107,10 +114,11 @@ public class PartyController extends V1Controller{
     }
 
     @PostMapping("/party/{partyId}/expense")
+    @ApiOperation(value = "Adds expense to the party")
     ResponseEntity<?> addPartyExpense(@PathVariable("partyId") Long partyId,
-                                      @RequestBody PartyExpenseRequest request) {
+                                      @RequestBody Expense request) {
         partyExpense.addPartyExpense(
-            new Expense(request.getName(),
+            new com.partymakers.shareparty.domain.party.entity.Expense(request.getName(),
                 request.getCost(),
                 request.getCount()),partyId);
 
@@ -118,18 +126,20 @@ public class PartyController extends V1Controller{
     }
 
     @GetMapping("/party/{partyId}/expense")
+    @ApiOperation(value = "Returns the party expenses", response = Expense.class)
     ResponseEntity<?> getPartyExpenses(@PathVariable("partyId") Long partyId) {
 
         return new ResponseEntity<>(
-            new PartyExpensesResponse(getPartyExpenses.getPartyExpenses(partyId)),
+            new PartyExpenses(getPartyExpenses.getPartyExpenses(partyId)),
             HttpStatus.OK);
     }
 
     @DeleteMapping("/party/{partyId}/expense")
-    ResponseEntity<?> removePartyExpense(@PathVariable("partyId")   Long partyId,
-                                         @RequestBody PartyExpenseRequest request) {
+    @ApiOperation(value = "Removes the party expense")
+    ResponseEntity<?> removePartyExpense(@PathVariable("partyId") Long partyId,
+                                         @ApiParam(value = "Full description of expense", required = true) @RequestBody Expense request) {
 
-        removePartyExpense.removePartyExpense(partyId, new Expense(
+        removePartyExpense.removePartyExpense(partyId, new com.partymakers.shareparty.domain.party.entity.Expense(
                                                 request.getName(),
                                                 request.getCost(),
                                                 request.getCount()));
@@ -138,8 +148,9 @@ public class PartyController extends V1Controller{
     }
 
     @GetMapping("/party/{partyId}")
+    @ApiOperation(value = "Returns full party information", response = FullPartyInfo.class)
     ResponseEntity<?> getParty(@PathVariable("partyId") Long partyId) {
-        return new ResponseEntity<>(getParty.getParty(partyId), HttpStatus.OK);
+        return new ResponseEntity<>(new FullPartyInfo(getParty.getParty(partyId)), HttpStatus.OK);
     }
 }
 

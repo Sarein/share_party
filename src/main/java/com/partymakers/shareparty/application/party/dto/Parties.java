@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Data
-public class PartiesResponse {
+public class Parties {
     @JsonProperty("parties")
     private final Set<PartyRoomDescription> partyRoomDescriptions;
 }
