@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyRoomDescription {
     @JsonProperty("name")
-    String name;
+    private String name;
 }
