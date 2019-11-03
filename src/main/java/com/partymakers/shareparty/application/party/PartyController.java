@@ -63,7 +63,7 @@ public class PartyController extends V1Controller{
 
     @PostMapping("/party")
     @ApiOperation(value = "Creates new the party room")
-    public ResponseEntity<?> createPartyRoom(@RequestBody PartyRoomDescription request){
+    public ResponseEntity<?> createPartyRoom(@ApiParam(value = "Description of party room", required = true) @RequestBody PartyRoomDescription request){
 
         URI creationLocation =
             ServletUriComponentsBuilder

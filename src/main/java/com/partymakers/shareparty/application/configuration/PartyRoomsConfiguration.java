@@ -17,55 +17,56 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class PartyRoomsConfiguration {
 
     @Bean
-    PartyRoomRepository partyRoomRepository(PartyRoomPersistenceRepository repository)
+    PartyRoomRepository partyRoomRepository(@Autowired PartyRoomPersistenceRepository repository)
     {
         return new PartyRoomRepositoryImpl(repository);
     }
 
+
     @Bean
-    CreatePartyRoom createPartyRoom(@Autowired PartyRoomPersistenceRepository repository)
+    CreatePartyRoom createPartyRoom(PartyRoomRepository repository)
     {
-        return new CreatePartyRoomImpl(partyRoomRepository(repository));
+        return new CreatePartyRoomImpl(repository);
     }
 
 
     @Bean
-    InviteFriend inviteFriend(@Autowired PartyRoomPersistenceRepository partyRoomRepository, @Autowired FriendsRepository friendsRepository){
-        return new InviteFriendImpl(partyRoomRepository(partyRoomRepository), friendsRepository);
+    InviteFriend inviteFriend(PartyRoomRepository repository, @Autowired FriendsRepository friendsRepository){
+        return new InviteFriendImpl(repository, friendsRepository);
     }
 
     @Bean
-    KickFiend kickFriend(@Autowired PartyRoomPersistenceRepository partyRoomRepository){
-        return new KickFiendImpl(partyRoomRepository(partyRoomRepository));
+    KickFiend kickFriend(PartyRoomRepository repository){
+        return new KickFiendImpl(repository);
     }
 
     @Bean
-    AddPartyExpense addPartyExpense(@Autowired PartyRoomPersistenceRepository partyRoomRepository){
-        return new AddPartyExpenseImpl(partyRoomRepository(partyRoomRepository));
+    AddPartyExpense addPartyExpense(PartyRoomRepository repository){
+        return new AddPartyExpenseImpl(repository);
     }
 
     @Bean
-    GetPartiesList getPartyRoomList(@Autowired PartyRoomPersistenceRepository partyRoomRepository) {
-        return new GetPartiesListImpl(partyRoomRepository(partyRoomRepository));
+    GetPartiesList getPartyRoomList(PartyRoomRepository repository) {
+        return new GetPartiesListImpl(repository);
     }
 
     @Bean
-    GetPartyFriends getPartyFriends(@Autowired PartyRoomPersistenceRepository partyRoomRepository) {
-        return new GetPartyFriendsImpl(partyRoomRepository(partyRoomRepository));
+    GetPartyFriends getPartyFriends(PartyRoomRepository repository) {
+        return new GetPartyFriendsImpl(repository);
     }
 
     @Bean
-    GetPartyExpenses getPartyExpenses(@Autowired PartyRoomPersistenceRepository partyRoomRepository) {
-        return new GetPartyExpensesImpl(partyRoomRepository(partyRoomRepository));
+    GetPartyExpenses getPartyExpenses(PartyRoomRepository repository) {
+        return new GetPartyExpensesImpl(repository);
     }
 
     @Bean
-    RemovePartyExpense removePartyExpense(@Autowired PartyRoomPersistenceRepository partyRoomRepository) {
-        return new RemovePartyExpenseImpl(partyRoomRepository(partyRoomRepository));
+    RemovePartyExpense removePartyExpense(PartyRoomRepository repository) {
+        return new RemovePartyExpenseImpl(repository);
     }
 
     @Bean
-    GetParty getParty (@Autowired PartyRoomPersistenceRepository partyRoomRepository) {
-        return new GetPartyImpl(partyRoomRepository(partyRoomRepository));
+    GetParty getParty (PartyRoomRepository repository) {
+        return new GetPartyImpl(repository);
     }
 }
