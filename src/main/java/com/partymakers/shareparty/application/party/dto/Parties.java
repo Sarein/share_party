@@ -5,12 +5,14 @@ import com.partymakers.shareparty.domain.party.entity.PartyRoomDescription;
 
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@RequiredArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Parties {
     @JsonProperty("parties")
-    private final Set<PartyRoomDescription> partyRoomDescriptions;
+    private Set<PartyRoomDescription> partyRoomDescriptions;
 }

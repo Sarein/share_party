@@ -5,6 +5,8 @@ import com.partymakers.shareparty.data.persistence.friends.entity.FriendEntity;
 import com.partymakers.shareparty.domain.friends.entity.Friend;
 import com.partymakers.shareparty.domain.friends.port.FriendsRepository;
 
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class FriendsRepositoryImpl implements FriendsRepository {
     }
 
     @Override
-    public Friend findOneById(String nickName) {
-        return repository.findById(nickName).get().toDomain();
+    public Optional<Friend> findOneById(String nickName) {
+        return repository.findById(nickName).flatMap(friendEntity -> Optional.of(friendEntity.toDomain()));
     }
 }

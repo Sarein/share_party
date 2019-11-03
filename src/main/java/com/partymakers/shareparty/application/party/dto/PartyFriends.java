@@ -5,9 +5,14 @@ import com.partymakers.shareparty.domain.friends.entity.Friend;
 
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PartyFriends {
     @JsonProperty("friends")
-    private final Set<Friend> friends;
+    private Set<Friend> friends;
 }

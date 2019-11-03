@@ -5,12 +5,14 @@ import com.partymakers.shareparty.domain.party.entity.Expense;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class PartyExpenses {
     @JsonProperty("expenses")
-    final private List<Expense> partyExpenses;
+    private List<Expense> partyExpenses;
 }

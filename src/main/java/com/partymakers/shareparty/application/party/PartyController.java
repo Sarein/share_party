@@ -1,7 +1,7 @@
 package com.partymakers.shareparty.application.party;
 
 import com.partymakers.shareparty.application.V1Controller;
-import com.partymakers.shareparty.application.friends.dto.InviteFriendRequest;
+import com.partymakers.shareparty.application.party.dto.InvitedFriendDescription;
 import com.partymakers.shareparty.application.party.dto.PartyRoomDescription;
 import com.partymakers.shareparty.application.party.dto.FullPartyInfo;
 import com.partymakers.shareparty.application.party.dto.Parties;
@@ -17,6 +17,8 @@ import com.partymakers.shareparty.domain.party.usecase.GetPartyFriends;
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
 import com.partymakers.shareparty.domain.party.usecase.KickFiend;
 import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
+import com.partymakers.shareparty.domain.party.usecase.exception.AlreadyExistException;
+import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -63,94 +65,157 @@ public class PartyController extends V1Controller{
     @ApiOperation(value = "Creates new the party room")
     public ResponseEntity<?> createPartyRoom(@RequestBody PartyRoomDescription request){
 
-        URI creationLocation =
-            ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(
-                    createPartyRoom.createPartyRoom(request.getName()))
-            .toUri();
+        try{
+            URI creationLocation =
+                ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(
+                        createPartyRoom.createPartyRoom(request.getName()))
+                    .toUri();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(creationLocation);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(creationLocation);
+            return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        }
+        catch(NotFoundException e ) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/party")
     @ApiOperation(value = "Returns list of existing party rooms", response = Parties.class)
     public ResponseEntity<?> getPartiesRoom(){
-        return new ResponseEntity<>(new Parties(getPartiesList.getPartyList()), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(new Parties(getPartiesList.getPartyList()), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 
     @PostMapping("/party/{partyId}/friend")
     @ApiOperation(value = "Invites friends to the party")
-    ResponseEntity<?> inviteFriendToParty(@PathVariable("partyId") Long partyId, @RequestBody InviteFriendRequest request) {
+    ResponseEntity<?> inviteFriendToParty(@PathVariable("partyId") Long partyId, @RequestBody InvitedFriendDescription request) {
 
         try {
             inviteUseCase.inviteFriend(request.getNickName(), partyId);
+            return new ResponseEntity<Void>(HttpStatus.OK);
         }
-        catch (Exception e ) {
+        catch (AlreadyExistException e){
             return new ResponseEntity<Void>(HttpStatus.ALREADY_REPORTED);
         }
-
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/party/{partyId}/friend")
     @ApiOperation(value = "Returns friends of the party", response = PartyFriends.class)
     ResponseEntity<?> getPartyFriend(@PathVariable("partyId") Long partyId) {
-        return new ResponseEntity<>(new PartyFriends(getPartyFriends.getPartyFriends(partyId)), HttpStatus.OK);
+
+        try {
+            return new ResponseEntity<>(new PartyFriends(getPartyFriends.getPartyFriends(partyId)), HttpStatus.OK);
+        }
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/party/{partyId}/friend")
     @ApiOperation(value = "Removes friend from the party")
-    ResponseEntity<?> kickFriend(@PathVariable("partyId") Long partyId, @RequestBody InviteFriendRequest request) {
-
-        kickUseCase.kickFriend(request.getNickName(), partyId);
-
-        return new ResponseEntity<Void>(HttpStatus.OK);
+    ResponseEntity<?> kickFriend(@PathVariable("partyId") Long partyId, @RequestBody InvitedFriendDescription request) {
+        try {
+            kickUseCase.kickFriend(request.getNickName(), partyId);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/party/{partyId}/expense")
     @ApiOperation(value = "Adds expense to the party")
     ResponseEntity<?> addPartyExpense(@PathVariable("partyId") Long partyId,
                                       @RequestBody Expense request) {
-        partyExpense.addPartyExpense(
-            new com.partymakers.shareparty.domain.party.entity.Expense(request.getName(),
-                request.getCost(),
-                request.getCount()),partyId);
+        try {
+            partyExpense.addPartyExpense(
+                new com.partymakers.shareparty.domain.party.entity.Expense(request.getName(),
+                    request.getCost(),
+                    request.getCount()),partyId);
 
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+            return new ResponseEntity<Void>(HttpStatus.CREATED);
+        }
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/party/{partyId}/expense")
     @ApiOperation(value = "Returns the party expenses", response = Expense.class)
     ResponseEntity<?> getPartyExpenses(@PathVariable("partyId") Long partyId) {
 
-        return new ResponseEntity<>(
-            new PartyExpenses(getPartyExpenses.getPartyExpenses(partyId)),
-            HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(
+                new PartyExpenses(getPartyExpenses.getPartyExpenses(partyId)),
+                HttpStatus.OK);
+        }
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/party/{partyId}/expense")
     @ApiOperation(value = "Removes the party expense")
     ResponseEntity<?> removePartyExpense(@PathVariable("partyId") Long partyId,
                                          @ApiParam(value = "Full description of expense", required = true) @RequestBody Expense request) {
+        try {
+            removePartyExpense.removePartyExpense(partyId, new com.partymakers.shareparty.domain.party.entity.Expense(
+                request.getName(),
+                request.getCost(),
+                request.getCount()));
 
-        removePartyExpense.removePartyExpense(partyId, new com.partymakers.shareparty.domain.party.entity.Expense(
-                                                request.getName(),
-                                                request.getCost(),
-                                                request.getCount()));
-
-        return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/party/{partyId}")
     @ApiOperation(value = "Returns full party information", response = FullPartyInfo.class)
     ResponseEntity<?> getParty(@PathVariable("partyId") Long partyId) {
-        return new ResponseEntity<>(new FullPartyInfo(getParty.getParty(partyId)), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(new FullPartyInfo(getParty.getParty(partyId)), HttpStatus.OK);
+        }
+        catch (NotFoundException e) {
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 

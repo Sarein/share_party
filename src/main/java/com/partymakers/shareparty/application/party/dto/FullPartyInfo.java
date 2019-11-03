@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.Set;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class FullPartyInfo {
-    private final Long          id;
-    private final String        name;
-    private final Set<Friend>   friends;
-    private final List<Expense> expenses;
+    private Long          id;
+    private String        name;
+    private Set<Friend>   friends;
+    private List<Expense> expenses;
 
     public FullPartyInfo(PartyRoom partyRoom) {
         id      = partyRoom.getDescription().getId();

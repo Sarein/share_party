@@ -2,14 +2,18 @@ package com.partymakers.shareparty.application.friends.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FriendDescription {
     @JsonProperty("name")
-    private final String name;
+    private String name;
     @JsonProperty("nickName")
-    private final String nickName;
+    private String nickName;
     @JsonProperty("eMail")
-    private final String eMail;
+    private String eMail;
 }

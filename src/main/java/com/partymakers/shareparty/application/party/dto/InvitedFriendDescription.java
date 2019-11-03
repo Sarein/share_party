@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Expense {
-    @JsonProperty("name")
-    private String  name;
-    @JsonProperty("cost")
-    private Integer cost;
-    @JsonProperty("count")
-    private Double count;
+public class InvitedFriendDescription {
+    @JsonProperty("nickName")
+    String nickName;
 }

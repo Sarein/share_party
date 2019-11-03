@@ -1,10 +1,10 @@
 package com.partymakers.shareparty.domain.party.usecase.impl;
 
-import com.partymakers.shareparty.domain.friends.entity.Friend;
 import com.partymakers.shareparty.domain.friends.port.FriendsRepository;
-import com.partymakers.shareparty.domain.party.entity.PartyRoom;
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository;
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
+import com.partymakers.shareparty.domain.party.usecase.exception.AlreadyExistException;
+import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,14 +16,18 @@ public class InviteFriendImpl implements InviteFriend {
 
     @Override
     public void inviteFriend(String nickName, long partyId) {
+        friendsRepository.findOneById(nickName).ifPresentOrElse(friend ->{
+/*                partyRoomRepository.findById(partyId).ifPresentOrElse(room -> {
 
-        Friend friend = friendsRepository.findOneById(nickName);
-        //TODO: add checking that`s friend not null
+                        if(room.getFriends().contains(friend)){
+                            throw new AlreadyExistException("Friend "  + friend.getName() + " already invited");
+                        }
 
-        PartyRoom room = partyRoomRepository.findById(partyId);
-        //TODO: add checking that`s friend not null or friends already exist
+                        room.getFriends().add(friend);
 
-        room.getFriends().add(friend);
-        partyRoomRepository.save(room);
+                        partyRoomRepository.save(room);},
+                    () -> {*//*throw new NotFoundException();*//*});*/
+            },
+        () -> {/*throw new NotFoundException();*/});
     }
 }
