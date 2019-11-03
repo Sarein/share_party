@@ -65,25 +65,17 @@ public class PartyController extends V1Controller{
     @ApiOperation(value = "Creates new the party room")
     public ResponseEntity<?> createPartyRoom(@RequestBody PartyRoomDescription request){
 
-        try{
-            URI creationLocation =
-                ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(
-                        createPartyRoom.createPartyRoom(request.getName()))
-                    .toUri();
+        URI creationLocation =
+            ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(
+                    createPartyRoom.createPartyRoom(request.getName()))
+                .toUri();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(creationLocation);
-            return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-        }
-        catch(NotFoundException e ) {
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
-            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(creationLocation);
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 
     }
 

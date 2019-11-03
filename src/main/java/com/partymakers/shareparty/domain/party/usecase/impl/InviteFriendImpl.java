@@ -17,7 +17,7 @@ public class InviteFriendImpl implements InviteFriend {
     @Override
     public void inviteFriend(String nickName, long partyId) {
         friendsRepository.findOneById(nickName).ifPresentOrElse(friend ->{
-/*                partyRoomRepository.findById(partyId).ifPresentOrElse(room -> {
+                partyRoomRepository.findById(partyId).ifPresentOrElse(room -> {
 
                         if(room.getFriends().contains(friend)){
                             throw new AlreadyExistException("Friend "  + friend.getName() + " already invited");
@@ -26,8 +26,8 @@ public class InviteFriendImpl implements InviteFriend {
                         room.getFriends().add(friend);
 
                         partyRoomRepository.save(room);},
-                    () -> {*//*throw new NotFoundException();*//*});*/
+                    () -> {throw new NotFoundException();});
             },
-        () -> {/*throw new NotFoundException();*/});
+        () -> {throw new NotFoundException();});
     }
 }
