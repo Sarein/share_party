@@ -72,6 +72,11 @@ public class RepositoryFacade <T, U, R> implements CrudRepository<T, R> {
     }
 
     @Override
+    public void deleteAllById(Iterable<? extends R> entities) {
+        repository.deleteAllById(entities);
+    }
+
+    @Override
     public void deleteAll(Iterable<? extends T> entities) {
         entities.forEach(entity -> delete(entity));
     }

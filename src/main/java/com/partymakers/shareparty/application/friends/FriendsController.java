@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,7 +23,6 @@ public class FriendsController extends V1Controller{
     private final RegisterFriend registerUseCase;
 
     @PostMapping("/friend")
-    @ApiOperation(value = "Invites friend to the party")
     ResponseEntity<?> registerFriend(@RequestBody FriendDescription request){
         try {
             registerUseCase.registerFriend(new Friend(request.getName(), request.getNickName(), request.getEMail()));
