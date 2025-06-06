@@ -62,6 +62,12 @@
 		<column name="count" type="double">
 			<constraints nullable="false"/>
 		</column>
+		<column name="room_id" type="int">
+			<constraints nullable="false"
+				references="party_room(room_id)"
+				foreignKeyName="fk_expense_room_id"
+				deleteCascade="true"/>
+		</column>
 	</createTable>
 </changeSet>
 
