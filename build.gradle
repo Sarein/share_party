@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'java'
+	id 'org.jetbrains.kotlin.jvm' version '2.1.21'
+	id 'org.jetbrains.kotlin.plugin.spring' version '2.1.21'
 }
 
 group = 'com.partymakers'
@@ -34,8 +36,26 @@ dependencies {
 	implementation("org.hibernate:hibernate-core:6.6.13.Final")
 	implementation("com.h2database:h2:2.3.232")
 	implementation("org.postgresql:postgresql:42.7.5")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("junit:junit")
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+compileKotlin {
+	kotlinOptions {
+		jvmTarget = '17'
+	}
+}
+
+compileTestKotlin {
+	kotlinOptions {
+		jvmTarget = '17'
+	}
 }
