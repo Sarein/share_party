@@ -37,7 +37,7 @@ public class PartyRoomEntity{
 
     @Id
     @Column(name = "room_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
