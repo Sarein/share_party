@@ -5,14 +5,11 @@ import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity
 import com.partymakers.shareparty.domain.party.entity.PartyRoom
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
-import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import java.util.*
 
-@ExtendWith(MockitoExtension::class)
 class PartyRoomRepositoryImplTest {
 
     private val persistenceRepository: PartyRoomPersistenceRepository = mock()
@@ -29,7 +26,7 @@ class PartyRoomRepositoryImplTest {
         )
         val savedPersistencePartyRoom = persistencePartyRoom.copy(id = 1L)
 
-        `when`(persistenceRepository.save(any())).thenReturn(savedPersistencePartyRoom)
+        whenever(persistenceRepository.save(any())).thenReturn(savedPersistencePartyRoom)
 
         // when
         val result = repository.save(domainPartyRoom)
@@ -48,9 +45,9 @@ class PartyRoomRepositoryImplTest {
             name = "Test Party"
         )
 
-        `when`(persistenceRepository.findById(1L)).thenReturn(Optional.of(persistencePartyRoom))
+        whenever(persistenceRepository.findById(1L)).thenReturn(Optional.of(persistencePartyRoom))
 
-        // when
+        // wheno
         val result = repository.findById(1L)
 
         // then
@@ -62,7 +59,7 @@ class PartyRoomRepositoryImplTest {
     @Test
     fun `should return empty optional when party room not found`() {
         // given
-        `when`(persistenceRepository.findById(1L)).thenReturn(Optional.empty())
+        whenever(persistenceRepository.findById(1L)).thenReturn(Optional.empty())
 
         // when
         val result = repository.findById(1L)
@@ -84,7 +81,7 @@ class PartyRoomRepositoryImplTest {
             PartyRoom(2L, "Party 2"),
         )
 
-        `when`(persistenceRepository.findAll()).thenReturn(persistencePartyRooms)
+        whenever(persistenceRepository.findAll()).thenReturn(persistencePartyRooms)
 
         // when
         val result = repository.findAll()
