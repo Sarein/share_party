@@ -4,11 +4,10 @@ import com.partymakers.shareparty.data.persistence.party.PartyRoomPersistenceRep
 import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity;
 import com.partymakers.shareparty.domain.party.entity.PartyRoom;
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class PartyRoomRepositoryImpl implements PartyRoomRepository {
@@ -17,7 +16,7 @@ public class PartyRoomRepositoryImpl implements PartyRoomRepository {
 
     @Override
     public PartyRoom save(PartyRoom partyRoom) {
-        return repository.save(PartyRoomEntity.toPersistence(partyRoom)).toDomain();
+        return repository.save(PartyRoomEntity.Companion.toPersistence(partyRoom)).toDomain();
     }
 
     @Override
@@ -27,6 +26,6 @@ public class PartyRoomRepositoryImpl implements PartyRoomRepository {
 
     @Override
     public Iterable<PartyRoom> findAll() {
-        return repository.findAll().stream().map(partyRoomEntity -> partyRoomEntity.toDomain()).collect(Collectors.toList());
+        return repository.findAll().stream().map(PartyRoomEntity::toDomain).collect(Collectors.toList());
     }
 }
