@@ -13,10 +13,10 @@ class InviteFriendImpl(
 
     override fun inviteFriend(nickName: String, partyId: Long) {
         val friend = friendsRepository.findOneById(nickName)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { NotFoundException("Друг не найден") }
 
         val room = partyRoomRepository.findById(partyId)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { NotFoundException("Party room не найдена") }
 
         if (room.friends.contains(friend)) {
             throw AlreadyExistException("Friend ${friend.nickName} already invited")

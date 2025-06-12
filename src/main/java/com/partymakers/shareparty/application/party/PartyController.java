@@ -98,7 +98,7 @@ public class PartyController extends V1Controller{
             return new ResponseEntity<Void>(HttpStatus.ALREADY_REPORTED);
         }
         catch (NotFoundException e) {
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
