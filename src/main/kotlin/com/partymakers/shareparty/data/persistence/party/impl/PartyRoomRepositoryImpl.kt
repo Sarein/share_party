@@ -18,4 +18,8 @@ class PartyRoomRepositoryImpl(
 
     override fun findAll(): Iterable<PartyRoom> =
         repository.findAll().map { it.toDomain() }
+
+    override fun deleteAll() {
+        repository.deleteAll()
+    }
 } 

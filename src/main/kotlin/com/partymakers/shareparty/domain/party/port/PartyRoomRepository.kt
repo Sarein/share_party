@@ -7,4 +7,5 @@ interface PartyRoomRepository {
     fun save(partyRoom: PartyRoom): PartyRoom
     fun findById(id: Long): Optional<PartyRoom>
     fun findAll(): Iterable<PartyRoom>
+    fun deleteAll()
 } 

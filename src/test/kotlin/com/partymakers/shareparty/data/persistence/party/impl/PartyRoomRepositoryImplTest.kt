@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.*
 
@@ -88,5 +89,14 @@ class PartyRoomRepositoryImplTest {
 
         // then
         assert(result == expectedPartyRooms)
+    }
+
+    @Test
+    fun `should delete all party rooms`() {
+        // when
+        repository.deleteAll()
+
+        // then
+        verify(persistenceRepository).deleteAll()
     }
 } 

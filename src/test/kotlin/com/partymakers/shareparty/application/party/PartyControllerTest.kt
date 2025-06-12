@@ -2,6 +2,8 @@ package com.partymakers.shareparty.application.party
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.partymakers.shareparty.application.party.dto.PartyRoomDescription
+import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -22,6 +24,14 @@ class PartyControllerTest {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
+    @Autowired
+    private lateinit var partyRoomRepository: PartyRoomRepository
+
+    @BeforeEach
+    fun setup() {
+        partyRoomRepository.deleteAll()
+    }
 
     @Test
     fun `should create party room and return 201 with location header`() {
