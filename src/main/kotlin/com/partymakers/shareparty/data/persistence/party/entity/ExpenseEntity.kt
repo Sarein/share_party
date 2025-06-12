@@ -7,7 +7,7 @@ import jakarta.persistence.*
 @Table(name = "expenses")
 data class ExpenseEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expense_id")
     val id: Long = 0,
 
@@ -19,19 +19,20 @@ data class ExpenseEntity(
 
     @Column(name = "count")
     val count: Double = 0.0,
-
+) {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", referencedColumnName = "room_id", columnDefinition = "integer")
-    val partyRoomEntity: PartyRoomEntity
-) {
+    lateinit var partyRoomEntity: PartyRoomEntity
+
     companion object {
         fun toPersistence(domainEntity: Expense, partyRoomEntity: PartyRoomEntity): ExpenseEntity {
-            return ExpenseEntity(
+            val expense = ExpenseEntity(
                 name = domainEntity.name,
                 cost = domainEntity.cost ?: 0,
                 count = domainEntity.count ?: 0.0,
-                partyRoomEntity = partyRoomEntity
             )
+            expense.partyRoomEntity = partyRoomEntity
+            return expense
         }
     }
 
