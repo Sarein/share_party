@@ -1,52 +1,30 @@
 package com.partymakers.shareparty.application.party;
 
 import com.partymakers.shareparty.application.V1Controller;
-import com.partymakers.shareparty.application.party.dto.InvitedFriendDescription;
-import com.partymakers.shareparty.application.party.dto.PartyRoomDescription;
-import com.partymakers.shareparty.application.party.dto.FullPartyInfo;
-import com.partymakers.shareparty.application.party.dto.Parties;
-import com.partymakers.shareparty.application.party.dto.Expense;
-import com.partymakers.shareparty.application.party.dto.PartyExpenses;
-import com.partymakers.shareparty.application.party.dto.PartyFriends;
-import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense;
-import com.partymakers.shareparty.domain.party.usecase.CreatePartyRoom;
-import com.partymakers.shareparty.domain.party.usecase.GetPartiesList;
-import com.partymakers.shareparty.domain.party.usecase.GetParty;
-import com.partymakers.shareparty.domain.party.usecase.GetPartyExpenses;
-import com.partymakers.shareparty.domain.party.usecase.GetPartyFriends;
-import com.partymakers.shareparty.domain.party.usecase.InviteFriend;
-import com.partymakers.shareparty.domain.party.usecase.KickFiend;
-import com.partymakers.shareparty.domain.party.usecase.RemovePartyExpense;
+import com.partymakers.shareparty.application.party.dto.*;
+import com.partymakers.shareparty.domain.party.usecase.*;
 import com.partymakers.shareparty.domain.party.usecase.exception.AlreadyExistException;
 import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException;
-
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequiredArgsConstructor
-public class PartyController extends V1Controller{
+public class PartyController extends V1Controller {
 
     @Autowired
     private final CreatePartyRoom createPartyRoom;
     @Autowired
     private final InviteFriend inviteUseCase;
     @Autowired
-    private final KickFiend kickUseCase;
+    private final KickFriend kickUseCase;
     @Autowired
     private final AddPartyExpense partyExpense;
     @Autowired
@@ -61,15 +39,15 @@ public class PartyController extends V1Controller{
     private final GetParty getParty;
 
     @PostMapping("/party")
-    public ResponseEntity<?> createPartyRoom(@RequestBody PartyRoomDescription request){
+    public ResponseEntity<?> createPartyRoom(@RequestBody PartyRoomDescription request) {
 
         URI creationLocation =
-            ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(
-                    createPartyRoom.createPartyRoom(request.getName()))
-                .toUri();
+                ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(
+                                createPartyRoom.createPartyRoom(request.getName()))
+                        .toUri();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(creationLocation);
@@ -78,11 +56,10 @@ public class PartyController extends V1Controller{
     }
 
     @GetMapping("/party")
-    public ResponseEntity<?> getPartiesRoom(){
+    public ResponseEntity<?> getPartiesRoom() {
         try {
             return new ResponseEntity<>(new Parties(getPartiesList.getPartyList()), HttpStatus.OK);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -93,14 +70,11 @@ public class PartyController extends V1Controller{
         try {
             inviteUseCase.inviteFriend(request.getNickName(), partyId);
             return new ResponseEntity<Void>(HttpStatus.OK);
-        }
-        catch (AlreadyExistException e){
+        } catch (AlreadyExistException e) {
             return new ResponseEntity<Void>(HttpStatus.ALREADY_REPORTED);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -110,11 +84,9 @@ public class PartyController extends V1Controller{
 
         try {
             return new ResponseEntity<>(new PartyFriends(getPartyFriends.getPartyFriends(partyId)), HttpStatus.OK);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -124,11 +96,9 @@ public class PartyController extends V1Controller{
         try {
             kickUseCase.kickFriend(request.getNickName(), partyId);
             return new ResponseEntity<Void>(HttpStatus.OK);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -138,16 +108,14 @@ public class PartyController extends V1Controller{
                                       @RequestBody Expense request) {
         try {
             partyExpense.addPartyExpense(
-                new com.partymakers.shareparty.domain.party.entity.Expense(request.getName(),
-                    request.getCost(),
-                    request.getCount()),partyId);
+                    new com.partymakers.shareparty.domain.party.entity.Expense(request.getName(),
+                            request.getCost(),
+                            request.getCount()), partyId);
 
             return new ResponseEntity<Void>(HttpStatus.CREATED);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -157,13 +125,11 @@ public class PartyController extends V1Controller{
 
         try {
             return new ResponseEntity<>(
-                new PartyExpenses(getPartyExpenses.getPartyExpenses(partyId)),
-                HttpStatus.OK);
-        }
-        catch (NotFoundException e) {
+                    new PartyExpenses(getPartyExpenses.getPartyExpenses(partyId)),
+                    HttpStatus.OK);
+        } catch (NotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -172,16 +138,14 @@ public class PartyController extends V1Controller{
     ResponseEntity<?> removePartyExpense(@PathVariable("partyId") Long partyId, @RequestBody Expense request) {
         try {
             removePartyExpense.removePartyExpense(partyId, new com.partymakers.shareparty.domain.party.entity.Expense(
-                request.getName(),
-                request.getCost(),
-                request.getCount()));
+                    request.getName(),
+                    request.getCost(),
+                    request.getCount()));
 
             return new ResponseEntity<Void>(HttpStatus.OK);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -190,11 +154,9 @@ public class PartyController extends V1Controller{
     ResponseEntity<?> getParty(@PathVariable("partyId") Long partyId) {
         try {
             return new ResponseEntity<>(new FullPartyInfo(getParty.getParty(partyId)), HttpStatus.OK);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -36,8 +36,8 @@ public class PartyRoomsConfiguration {
     }
 
     @Bean
-    KickFiend kickFriend(PartyRoomRepository repository){
-        return new KickFiendImpl(repository);
+    KickFriend kickFriend(PartyRoomRepository repository){
+        return new KickFriendImpl(repository);
     }
 
     @Bean
