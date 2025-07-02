@@ -4,7 +4,9 @@ import com.partymakers.shareparty.domain.friends.entity.Friend
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
 import com.partymakers.shareparty.domain.party.usecase.GetPartyFriends
 import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import org.springframework.stereotype.Service
 
+@Service
 class GetPartyFriendsImpl(
     private val repository: PartyRoomRepository
 ) : GetPartyFriends {

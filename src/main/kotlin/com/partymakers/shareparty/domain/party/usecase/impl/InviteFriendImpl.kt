@@ -5,7 +5,9 @@ import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
 import com.partymakers.shareparty.domain.party.usecase.InviteFriend
 import com.partymakers.shareparty.domain.party.usecase.exception.AlreadyExistException
 import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import org.springframework.stereotype.Service
 
+@Service
 class InviteFriendImpl(
     private val partyRoomRepository: PartyRoomRepository,
     private val friendsRepository: FriendsRepository,
@@ -13,7 +15,8 @@ class InviteFriendImpl(
 
     override fun inviteFriend(nickName: String, partyId: Long) {
         val friend = friendsRepository.findOneById(nickName)
-            .orElseThrow { NotFoundException("Друг не найден") }
+
+        if (friend == null) throw NotFoundException("Друг не найден")
 
         val room = partyRoomRepository.findById(partyId)
             .orElseThrow { NotFoundException("Party room не найдена") }

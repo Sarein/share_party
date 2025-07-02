@@ -4,8 +4,10 @@ import com.partymakers.shareparty.data.persistence.party.PartyRoomPersistenceRep
 import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity
 import com.partymakers.shareparty.domain.party.entity.PartyRoom
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
+import org.springframework.stereotype.Repository
 import java.util.*
 
+@Repository
 class PartyRoomRepositoryImpl(
     private val repository: PartyRoomPersistenceRepository
 ) : PartyRoomRepository {

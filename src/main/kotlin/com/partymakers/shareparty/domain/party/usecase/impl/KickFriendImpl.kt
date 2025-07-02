@@ -3,7 +3,9 @@ package com.partymakers.shareparty.domain.party.usecase.impl
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
 import com.partymakers.shareparty.domain.party.usecase.KickFriend
 import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import org.springframework.stereotype.Service
 
+@Service
 class KickFriendImpl(
     private val partyRoomRepository: PartyRoomRepository
 ) : KickFriend {

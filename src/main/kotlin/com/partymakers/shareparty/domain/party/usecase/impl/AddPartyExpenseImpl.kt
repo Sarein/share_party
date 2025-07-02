@@ -4,7 +4,9 @@ import com.partymakers.shareparty.domain.party.entity.Expense
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
 import com.partymakers.shareparty.domain.party.usecase.AddPartyExpense
 import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import org.springframework.stereotype.Service
 
+@Service
 class AddPartyExpenseImpl(
     private val repository: PartyRoomRepository
 ) : AddPartyExpense {

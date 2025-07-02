@@ -3,7 +3,9 @@ package com.partymakers.shareparty.domain.party.usecase.impl
 import com.partymakers.shareparty.domain.party.entity.PartyRoomDescription
 import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
 import com.partymakers.shareparty.domain.party.usecase.GetPartiesList
+import org.springframework.stereotype.Service
 
+@Service
 class GetPartiesListImpl(
     private val repository: PartyRoomRepository
 ) : GetPartiesList {
