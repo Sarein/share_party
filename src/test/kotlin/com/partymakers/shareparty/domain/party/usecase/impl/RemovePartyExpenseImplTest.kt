@@ -1,9 +1,10 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.party.entity.Expense
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
-import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.entity.Expense
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.usecase.RemovePartyExpenseImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith

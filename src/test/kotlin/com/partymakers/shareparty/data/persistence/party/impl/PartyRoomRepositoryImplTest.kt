@@ -1,8 +1,9 @@
 package com.partymakers.shareparty.data.persistence.party.impl
 
-import com.partymakers.shareparty.data.persistence.party.PartyRoomPersistenceRepository
-import com.partymakers.shareparty.data.persistence.party.entity.PartyRoomEntity
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
+import com.partymakers.shareparty.party.data.repository.PartyRoomPersistenceRepository
+import com.partymakers.shareparty.party.data.dto.PartyRoomEntity
+import com.partymakers.shareparty.party.data.repository.PartyRoomRepositoryImpl
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any

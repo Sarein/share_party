@@ -1,9 +1,10 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.party.entity.Expense
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
-import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.entity.Expense
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.usecase.AddPartyExpenseUseCaseImpl
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -22,11 +23,11 @@ class AddPartyExpenseImplTest {
 
     @Mock
     private lateinit var repository: PartyRoomRepository
-    private lateinit var addPartyExpense: AddPartyExpenseImpl
+    private lateinit var addPartyExpense: AddPartyExpenseUseCaseImpl
 
     @BeforeEach
     fun setup() {
-        addPartyExpense = AddPartyExpenseImpl(repository)
+        addPartyExpense = AddPartyExpenseUseCaseImpl(repository)
     }
 
     @Test

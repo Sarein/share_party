@@ -1,9 +1,9 @@
 package com.partymakers.shareparty.application.party
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.partymakers.shareparty.application.friends.dto.FriendDescription
-import com.partymakers.shareparty.application.party.dto.InvitedFriendDescription
-import com.partymakers.shareparty.application.party.dto.PartyRoomDescription
+import com.partymakers.shareparty.friends.presentation.dto.FriendDescription
+import com.partymakers.shareparty.party.presentation.dto.InvitedFriendDescription
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescription
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

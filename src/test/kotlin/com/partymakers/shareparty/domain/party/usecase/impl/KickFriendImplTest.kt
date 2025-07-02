@@ -1,9 +1,10 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.friends.entity.Friend
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
-import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import com.partymakers.shareparty.friends.domain.entity.Friend
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.friends.domain.usecase.KickFriendUseCaseImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,7 +20,7 @@ import java.util.*
 class KickFriendImplTest {
 
     private val repository: PartyRoomRepository = mock()
-    private val kickFriend: KickFriendImpl = KickFriendImpl(repository)
+    private val kickFriend: KickFriendUseCaseImpl = KickFriendUseCaseImpl(repository)
 
     @Test
     fun `should remove friend from party room`() {

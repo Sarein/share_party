@@ -1,7 +1,8 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.usecase.CreatePartyRoomUseCaseImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -13,7 +14,7 @@ import org.mockito.kotlin.whenever
 class CreatePartyRoomImplTest {
     private val repository: PartyRoomRepository = mock()
 
-    private val useCase: CreatePartyRoomImpl = CreatePartyRoomImpl(repository)
+    private val useCase: CreatePartyRoomUseCaseImpl = CreatePartyRoomUseCaseImpl(repository)
 
     private val partyRoomCaptor = argumentCaptor<PartyRoom>()
 

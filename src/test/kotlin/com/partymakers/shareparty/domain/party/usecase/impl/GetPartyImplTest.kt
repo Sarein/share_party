@@ -1,8 +1,9 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
-import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.usecase.GetPartyUseCaseImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -13,7 +14,7 @@ import java.util.Optional
 class GetPartyImplTest {
 
     private val repository: PartyRoomRepository = mock()
-    private val useCase = GetPartyImpl(repository)
+    private val useCase = GetPartyUseCaseImpl(repository)
 
     @Test
     fun `should return party room when it exists`() {

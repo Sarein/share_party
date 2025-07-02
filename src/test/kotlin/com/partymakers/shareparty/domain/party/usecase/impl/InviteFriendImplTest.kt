@@ -1,11 +1,12 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.friends.entity.Friend
-import com.partymakers.shareparty.domain.friends.port.FriendsRepository
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
-import com.partymakers.shareparty.domain.party.usecase.exception.AlreadyExistException
-import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import com.partymakers.shareparty.friends.domain.entity.Friend
+import com.partymakers.shareparty.friends.domain.repository.FriendsRepository
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.exception.AlreadyExistException
+import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.friends.domain.usecase.InviteFriendUseCaseImpl
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -18,7 +19,7 @@ class InviteFriendImplTest {
 
     private val partyRoomRepository: PartyRoomRepository = mock()
     private val friendsRepository: FriendsRepository = mock()
-    private val useCase = InviteFriendImpl(partyRoomRepository, friendsRepository)
+    private val useCase = InviteFriendUseCaseImpl(partyRoomRepository, friendsRepository)
 
     @Test
     fun `should invite friend to party room`() {

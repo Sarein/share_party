@@ -1,8 +1,8 @@
 package com.partymakers.shareparty.application.party
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.partymakers.shareparty.application.party.dto.PartyRoomDescription
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescription
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

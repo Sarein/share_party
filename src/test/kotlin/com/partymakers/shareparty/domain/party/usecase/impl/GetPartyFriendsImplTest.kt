@@ -1,9 +1,10 @@
 package com.partymakers.shareparty.domain.party.usecase.impl
 
-import com.partymakers.shareparty.domain.friends.entity.Friend
-import com.partymakers.shareparty.domain.party.entity.PartyRoom
-import com.partymakers.shareparty.domain.party.port.PartyRoomRepository
-import com.partymakers.shareparty.domain.party.usecase.exception.NotFoundException
+import com.partymakers.shareparty.friends.domain.entity.Friend
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.usecase.GetPartyFriendsUseCaseImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -18,7 +19,7 @@ import java.util.*
 class GetPartyFriendsImplTest {
 
     private val repository: PartyRoomRepository = mock()
-    private val getPartyFriends: GetPartyFriendsImpl = GetPartyFriendsImpl(repository)
+    private val getPartyFriends: GetPartyFriendsUseCaseImpl = GetPartyFriendsUseCaseImpl(repository)
 
     @Test
     fun `should return set of friends for party room`() {
