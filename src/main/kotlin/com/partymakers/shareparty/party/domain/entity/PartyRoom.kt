@@ -2,10 +2,10 @@ package com.partymakers.shareparty.party.domain.entity
 
 import com.partymakers.shareparty.friends.domain.entity.Friend
 
-data class PartyRoom(
+internal data class PartyRoom(
     val description: PartyRoomDescription,
     val friends: Set<Friend> = setOf(),
-    val expenses: List<Expense> = listOf()
+    val expenses: List<Expense> = listOf(),
 ) {
     constructor(name: String) : this(
         description = PartyRoomDescription(name),

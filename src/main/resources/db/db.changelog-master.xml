@@ -3,10 +3,10 @@
                 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-<changeSet author="Evgeniy Koveshnikov" id="03">
+<changeSet author="Evgeniy Koveshnikov" id="05-product-catalog">
 	<createTable remarks="Used to store party rooms"
 		tableName="party_room">
-		<column name="room_id" type="int" autoIncrement = "true">
+		<column name="room_id" type="long" autoIncrement = "true">
 			<constraints primaryKey="true" nullable="false" />
 		</column>
 		<column name="name" type="varchar(255)">
@@ -28,8 +28,8 @@
 	</createTable>
 
 	<createTable remarks="Friends invite"
-		tableName="partyroom_friends">
-		<column name="partyroom_id" type="int">
+		tableName="party_room_friends">
+		<column name="party_room_id" type="long">
 			<constraints nullable="false"
 				references = "party_room(room_id)"
 				foreignKeyName = "fk_room_id"
@@ -37,11 +37,10 @@
 				primaryKey="true"
 			/>
 		</column>
-
 		<column name="friend_nick_name" type="varchar(255)">
 			<constraints nullable="false"
-				references = "friends"
-				foreignKeyName = "fk_friends_nick_name(nick_name)"
+				references = "friends(nick_name)"
+				foreignKeyName = "fk_friends_nick_name"
 				deleteCascade = "true"
 				primaryKey="true"
 			/>
@@ -50,19 +49,19 @@
 
 	<createTable remarks="List of expenses"
 		tableName="expenses">
-		<column name="expense_id" type="int" autoIncrement="true">
+		<column name="expense_id" type="long" autoIncrement="true">
 			<constraints primaryKey="true" nullable="false" />
 		</column>
 		<column name="name" type="varchar(255)">
 			<constraints nullable="false" />
 		</column>
-		<column name="cost" type="int">
+		<column name="cost" type="long">
 			<constraints nullable="false"/>
 		</column>
 		<column name="count" type="double">
 			<constraints nullable="false"/>
 		</column>
-		<column name="room_id" type="int">
+		<column name="room_id" type="long">
 			<constraints nullable="false"
 				references="party_room(room_id)"
 				foreignKeyName="fk_expense_room_id"

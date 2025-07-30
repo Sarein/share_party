@@ -1,7 +1,8 @@
 package com.partymakers.shareparty.party.domain.usecase
 
 import com.partymakers.shareparty.party.domain.entity.Expense
+import com.partymakers.shareparty.party.domain.entity.PartyRoom
 
-interface AddPartyExpenseUseCase {
-    fun addPartyExpense(expense: Expense, partyId: Long)
+internal interface AddPartyExpenseUseCase {
+    operator fun invoke(roomId: Long, expense: Expense): PartyRoom
 } 

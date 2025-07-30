@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: shareparty-postgres
+    image: postgres:12.15
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+    ports:
+      - "0.0.0.0:5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=shareparty
+    user: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

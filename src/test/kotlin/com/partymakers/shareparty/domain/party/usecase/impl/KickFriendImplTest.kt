@@ -4,7 +4,7 @@ import com.partymakers.shareparty.friends.domain.entity.Friend
 import com.partymakers.shareparty.party.domain.entity.PartyRoom
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
-import com.partymakers.shareparty.friends.domain.usecase.KickFriendUseCaseImpl
+import com.partymakers.shareparty.party.domain.usecase.KickFriendUseCaseImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith

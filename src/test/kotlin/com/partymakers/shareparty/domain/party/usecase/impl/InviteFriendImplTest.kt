@@ -6,7 +6,7 @@ import com.partymakers.shareparty.party.domain.entity.PartyRoom
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import com.partymakers.shareparty.party.domain.exception.AlreadyExistException
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
-import com.partymakers.shareparty.friends.domain.usecase.InviteFriendUseCaseImpl
+import com.partymakers.shareparty.party.domain.usecase.InviteFriendUseCaseImpl
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any

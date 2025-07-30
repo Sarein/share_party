@@ -1,6 +1,6 @@
 package com.partymakers.shareparty.party.domain.exception
 
-class NotFoundException : RuntimeException {
+internal class NotFoundException : RuntimeException {
     constructor() : super()
     constructor(description: String) : super(description)
 } 

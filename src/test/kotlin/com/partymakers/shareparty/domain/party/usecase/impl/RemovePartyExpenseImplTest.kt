@@ -4,7 +4,7 @@ import com.partymakers.shareparty.party.domain.entity.Expense
 import com.partymakers.shareparty.party.domain.entity.PartyRoom
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
-import com.partymakers.shareparty.party.domain.usecase.RemovePartyExpenseImpl
+import com.partymakers.shareparty.party.domain.usecase.RemovePartyExpenseUseCaseImpl
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,7 +20,7 @@ import java.util.*
 class RemovePartyExpenseImplTest {
 
     private val repository: PartyRoomRepository = mock()
-    private val removePartyExpense: RemovePartyExpenseImpl = RemovePartyExpenseImpl(repository)
+    private val removePartyExpense: RemovePartyExpenseUseCaseImpl = RemovePartyExpenseUseCaseImpl(repository)
 
     @Test
     fun `should remove expense from party room`() {

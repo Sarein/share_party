@@ -1,17 +1,16 @@
 package com.partymakers.shareparty.party.domain.usecase
 
-import com.partymakers.shareparty.party.domain.entity.Expense
 import com.partymakers.shareparty.party.domain.entity.PartyRoom
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import org.springframework.stereotype.Service
 
 @Service
-internal class AddPartyExpenseUseCaseImpl(
-    private val repository: PartyRoomRepository
-) : AddPartyExpenseUseCase {
+internal class RemovePartyExpenseUseCaseImpl(
+    private val partyRoomRepository: PartyRoomRepository
+) : RemovePartyExpenseUseCase {
 
-    override fun invoke(roomId: Long, expense: Expense): PartyRoom =
-        repository.addExpense(roomId, expense)
+    override fun invoke(partyId: Long, expenseId: Long): PartyRoom =
+        partyRoomRepository.deleteExpense(partyId, expenseId)
             ?: throw NotFoundException("Requested room is not exist")
 } 

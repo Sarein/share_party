@@ -1,7 +1,8 @@
 package com.partymakers.shareparty.party.domain.entity
 
-data class Expense(
+internal data class Expense(
+    val id: Long?,
     val name: String,
-    val cost: Int?,
-    val count: Double?
+    val cost: Int,
+    val count: Double,
 ) 
