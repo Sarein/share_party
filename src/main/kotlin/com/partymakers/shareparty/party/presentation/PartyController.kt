@@ -1,12 +1,11 @@
 package com.partymakers.shareparty.party.presentation
 
 import com.partymakers.shareparty.V1Controller
-import com.partymakers.shareparty.party.domain.entity.Expense
 import com.partymakers.shareparty.party.domain.exception.AlreadyExistException
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
 import com.partymakers.shareparty.party.domain.usecase.*
 import com.partymakers.shareparty.party.presentation.dto.*
-import com.partymakers.shareparty.party.presentation.mapper.ExpenseMapper
+import com.partymakers.shareparty.party.presentation.mapper.ExpenseDtoMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -22,7 +21,7 @@ internal class PartyController(
     private val getPartiesListUseCase: GetPartiesUseCase,
     private val removePartyExpenseUseCase: RemovePartyExpenseUseCase,
     private val getPartyUseCase: GetPartyUseCase,
-    private val expenseMapper: ExpenseMapper,
+    private val expenseDtoMapper: ExpenseDtoMapper,
 ) : V1Controller() {
 
     @PostMapping("/party")
@@ -85,7 +84,7 @@ internal class PartyController(
             cost = request.cost,
             count = request.count
         )
-        val expenseModel = expenseMapper.toModel(dto)
+        val expenseModel = expenseDtoMapper.toModel(dto)
         addPartyExpenseUseCase(partyId, expenseModel)
         ResponseEntity.status(HttpStatus.CREATED).build<Unit>()
     } catch (e: NotFoundException) {

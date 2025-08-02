@@ -5,7 +5,7 @@ import com.partymakers.shareparty.party.presentation.dto.ExpenseDto
 import org.springframework.stereotype.Component
 
 @Component
-internal class ExpenseMapper {
+internal class ExpenseDtoMapper {
 
     fun toModel(dto: ExpenseDto): Expense =
         Expense(
