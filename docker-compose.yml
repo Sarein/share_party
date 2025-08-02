@@ -1,0 +1,38 @@
+
+
+services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:14
+    container_name: shareparty-postgres
+    environment:
+      POSTGRES_DB: shareparty
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot приложение
+  app:
+    build: .
+    container_name: shareparty-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shareparty
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+
+volumes:
+  postgres_data: 
