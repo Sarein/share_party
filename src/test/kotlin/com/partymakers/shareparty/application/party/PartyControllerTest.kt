@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 class PartyControllerTest {
 
     @Autowired
@@ -52,7 +52,7 @@ class PartyControllerTest {
     @Test
     fun `should return empty list when no party rooms exist`() {
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/party")
+            MockMvcRequestBuilders.get("/api/v1/parties")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -77,39 +77,40 @@ class PartyControllerTest {
 
         // then - verify list contains all created parties
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/party")
+            MockMvcRequestBuilders.get("/api/v1/parties")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.parties").isArray)
             .andExpect(MockMvcResultMatchers.jsonPath("$.parties.length()").value(3))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.parties[0].name").value("Party 1"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.parties[1].name").value("Party 2"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.parties[2].name").value("Party 3"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.parties[0].description.name").value("Party 1"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.parties[1].description.name").value("Party 2"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.parties[2].description.name").value("Party 3"))
     }
 
     @Test
     fun `should return party room`() {
         // given
-        val partyNames = listOf("Party 1", "Party 2", "Party 3")
+        val partyName = "Test Party"
+        val request = PartyRoomDescription(partyName)
 
-        // when - create party rooms
-        partyNames.forEach { name ->
-            mockMvc.perform(
+        val result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/party")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(PartyRoomDescription(name)))
+                .content(objectMapper.writeValueAsString(request))
             )
                 .andExpect(MockMvcResultMatchers.status().isCreated)
-        }
+            .andReturn()
 
+        val location = result.response.getHeader("Location")
+        val id = location?.substring(location.lastIndexOf('/') + 1)
         // then - verify list contains all created parties
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/party/2")
+            MockMvcRequestBuilders.get("/api/v1/party/$id")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("2"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Party 2"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.description.id").value(id))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.description.name").value(partyName))
     }
 }
