@@ -291,8 +291,6 @@ internal class PartyRoomRepositoryImpl(
                         e.cost,
                         e.count
                     FROM expenses e
-                    JOIN products as p
-                        ON e.product_id = p.product_id
                     WHERE e.room_id = pr.room_id
                 ) as room_expenses) as expenses                                                
             FROM party_room as pr                             

@@ -41,6 +41,7 @@ internal class PartyController(
     fun getPartiesRoom(): ResponseEntity<*> = try {
         ResponseEntity.ok(Parties(getPartiesListUseCase()))
     } catch (e: Exception) {
+        e.printStackTrace()
         ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
@@ -109,7 +110,7 @@ internal class PartyController(
     @GetMapping("/party/{partyId}")
     fun getParty(@PathVariable partyId: Long): ResponseEntity<*> = try {
         val partyRoom = getPartyUseCase(partyId)
-        if(partyRoom == null) {
+        if (partyRoom == null) {
             ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
         } else {
             ResponseEntity.ok(partyRoom)
