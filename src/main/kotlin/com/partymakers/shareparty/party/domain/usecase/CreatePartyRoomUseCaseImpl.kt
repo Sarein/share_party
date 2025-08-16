@@ -8,6 +8,6 @@ internal class CreatePartyRoomUseCaseImpl(
     private val repository: PartyRoomRepository
 ) : CreatePartyRoomUseCase {
 
-    override fun invoke(partyName: String) =
+    override fun invoke(partyName: String): Int =
         repository.create(partyName)
 }

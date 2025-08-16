@@ -18,12 +18,15 @@ internal class PartyRoomRepositoryImpl(
     private val partyRoomMapper: PartyRoomMapper,
 ) : PartyRoomRepository {
 
-    override fun create(partyName: String) {
+    override fun create(partyName: String): Int {
         val parameters = mapOf(
             PARTY_ROOM_NAME to partyName,
         )
 
-        jdbcTemplate.update(ADD_PARTY_ROOM_SQL, parameters)
+        return jdbcTemplate.queryForObject(
+            ADD_PARTY_ROOM_SQL,
+            parameters
+        ) { rs, _ -> rs.getInt(PARTY_ROOM_ID) } ?: 0
     }
 
     override fun addFriend(roomId: Long, friendNickName: String): PartyRoom? {
@@ -115,6 +118,10 @@ internal class PartyRoomRepositoryImpl(
         )
 
         jdbcTemplate.update(DELETE_ROOM_BY_ID_SQL, parameters)
+    }
+
+    override fun deleteAll() {
+        jdbcTemplate.update(DELETE_ALL_ROOMS_SQL, emptyMap<String, Unit>())
     }
 
     private companion object {
@@ -248,6 +255,7 @@ internal class PartyRoomRepositoryImpl(
         val ADD_PARTY_ROOM_SQL = """
             INSERT INTO party_room (name)
             VALUES(:$PARTY_ROOM_NAME)
+            RETURNING *
         """.trimIndent()
 
         val GET_PARTY_ROOM_BY_ID_SQL = """          
@@ -301,7 +309,11 @@ internal class PartyRoomRepositoryImpl(
             WHERE room_id = :$PARTY_ROOM_ID
         """.trimIndent()
 
-        val DELETE_FRIEND_SQL ="""
+        val DELETE_ALL_ROOMS_SQL = """
+            DELETE FROM party_room  
+        """.trimIndent()
+
+        val DELETE_FRIEND_SQL = """
             WITH delete_friend AS (
                 DELETE FROM party_room_friends 
                 WHERE party_room_id = :$FRIENDS_PARTY_ROOM_ROOM_ID AND friend_nick_name = :$FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME
