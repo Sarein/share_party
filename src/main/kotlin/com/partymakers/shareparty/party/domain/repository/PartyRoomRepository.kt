@@ -4,7 +4,7 @@ import com.partymakers.shareparty.party.domain.entity.Expense
 import com.partymakers.shareparty.party.domain.entity.PartyRoom
 
 internal interface PartyRoomRepository {
-    fun create(partyName: String): Int
+    fun create(partyName: String): Long
     fun addFriend(roomId: Long, friendNickName: String): PartyRoom?
     fun deleteFriend(roomId: Long, friendNickName: String): PartyRoom?
     fun addExpense(roomId: Long, expense: Expense): PartyRoom?

@@ -1,18 +1,19 @@
 package com.partymakers.shareparty.party.presentation
 
-import com.partymakers.shareparty.V1Controller
-import com.partymakers.shareparty.party.domain.exception.AlreadyExistException
-import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.common.dto.Content
 import com.partymakers.shareparty.party.domain.usecase.*
-import com.partymakers.shareparty.party.presentation.dto.*
+import com.partymakers.shareparty.party.presentation.dto.ExpenseDto
+import com.partymakers.shareparty.party.presentation.dto.InvitedFriendDescriptionDto
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescriptionDto
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomDto
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomIdDto
 import com.partymakers.shareparty.party.presentation.mapper.ExpenseDtoMapper
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import com.partymakers.shareparty.party.presentation.mapper.PartyRoomDtoMapper
+import com.partymakers.shareparty.party.presentation.mapper.PartyRoomIdDtoMapper
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.net.URI
 
 @RestController
+@RequestMapping(PartyControllerApiV1.PARTY_BASE_URL)
 internal class PartyController(
     private val createPartyRoomUseCase: CreatePartyRoomUseCase,
     private val inviteUseCase: InviteFriendUseCase,
@@ -21,101 +22,57 @@ internal class PartyController(
     private val getPartiesListUseCase: GetPartiesUseCase,
     private val removePartyExpenseUseCase: RemovePartyExpenseUseCase,
     private val getPartyUseCase: GetPartyUseCase,
+    private val partyRoomIdDtoMapper: PartyRoomIdDtoMapper,
+    private val partyRoomDtoMapper: PartyRoomDtoMapper,
     private val expenseDtoMapper: ExpenseDtoMapper,
-) : V1Controller() {
+) : PartyControllerApiV1 {
 
-    @PostMapping("/party")
-    fun createPartyRoom(@RequestBody request: PartyRoomDescription): ResponseEntity<Unit> {
-        val creationLocation: URI = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(createPartyRoomUseCase(request.name))
-            .toUri()
-
-        return ResponseEntity
-            .created(creationLocation)
-            .build()
+    override fun createPartyRoom(@RequestBody request: PartyRoomDescriptionDto): PartyRoomIdDto {
+        val id = createPartyRoomUseCase(request.name)
+        return partyRoomIdDtoMapper.toDto(id)
     }
 
-    @GetMapping("/parties")
-    fun getPartiesRoom(): ResponseEntity<*> = try {
-        ResponseEntity.ok(Parties(getPartiesListUseCase()))
-    } catch (e: Exception) {
-        e.printStackTrace()
-        ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
+    override fun getPartiesRoom(): Content<PartyRoomDto> {
+        val partiesList = getPartiesListUseCase().map(partyRoomDtoMapper::toDto)
+        return Content(partiesList)
     }
 
-    @PostMapping("/party/{partyId}/friend")
-    fun inviteFriendToParty(
+    override fun inviteFriendToParty(
         @PathVariable partyId: Long,
-        @RequestBody request: InvitedFriendDescription
-    ): ResponseEntity<*> = try {
-        inviteUseCase(request.nickName, partyId)
-        ResponseEntity.ok().build<Unit>()
-    } catch (e: AlreadyExistException) {
-        ResponseEntity<Unit>(HttpStatus.ALREADY_REPORTED)
-    } catch (e: NotFoundException) {
-        ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
-    } catch (e: Exception) {
-        ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
+        @RequestBody request: InvitedFriendDescriptionDto
+    ): PartyRoomDto {
+        val partyRoomModel = inviteUseCase(request.nickName, partyId)
+        return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    @DeleteMapping("/party/{partyId}/friend")
-    fun kickFriend(
+    override fun kickFriend(
         @PathVariable partyId: Long,
-        @RequestBody request: InvitedFriendDescription
-    ): ResponseEntity<*> = try {
-        kickFriendUseCase(partyId, request.nickName)
-        ResponseEntity.ok().build<Unit>()
-    } catch (e: NotFoundException) {
-        ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
-    } catch (e: Exception) {
-        ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
+        @RequestBody request: InvitedFriendDescriptionDto
+    ): PartyRoomDto {
+        val partyRoomModel = kickFriendUseCase(partyId, request.nickName)
+        return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    @PostMapping("/party/{partyId}/expense")
-    fun addPartyExpense(
+    override fun addPartyExpense(
         @PathVariable partyId: Long,
         @RequestBody request: ExpenseDto
-    ): ResponseEntity<*> = try {
+    ): PartyRoomDto {
 
-        val dto = ExpenseDto(
-            id = null,
-            name = request.name,
-            cost = request.cost,
-            count = request.count
-        )
-        val expenseModel = expenseDtoMapper.toModel(dto)
-        addPartyExpenseUseCase(partyId, expenseModel)
-        ResponseEntity.status(HttpStatus.CREATED).build<Unit>()
-    } catch (e: NotFoundException) {
-        ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
-    } catch (e: Exception) {
-        ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
+        val expenseModel = expenseDtoMapper.toModel(request)
+        val partyRoomModel = addPartyExpenseUseCase(partyId, expenseModel)
+        return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    @DeleteMapping("/party/{partyId}/expense")
-    fun removePartyExpense(
+    override fun removePartyExpense(
         @PathVariable partyId: Long,
         @RequestParam expenseId: Long
-    ): ResponseEntity<*> = try {
-        removePartyExpenseUseCase(partyId, expenseId)
-        ResponseEntity.ok().build<Unit>()
-    } catch (e: NotFoundException) {
-        ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
-    } catch (e: Exception) {
-        ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
+    ): PartyRoomDto {
+        val partyRoomModel = removePartyExpenseUseCase(partyId, expenseId)
+        return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    @GetMapping("/party/{partyId}")
-    fun getParty(@PathVariable partyId: Long): ResponseEntity<*> = try {
-        val partyRoom = getPartyUseCase(partyId)
-        if (partyRoom == null) {
-            ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
-        } else {
-            ResponseEntity.ok(partyRoom)
-        }
-    } catch (e: Exception) {
-        ResponseEntity<Unit>(HttpStatus.INTERNAL_SERVER_ERROR)
+    override fun getParty(@PathVariable partyId: Long): PartyRoomDto? {
+        val partyRoomModel = getPartyUseCase(partyId)
+        return  partyRoomModel?.let(partyRoomDtoMapper::toDto)
     }
-} 
+}

@@ -18,7 +18,7 @@ internal class PartyRoomRepositoryImpl(
     private val partyRoomMapper: PartyRoomMapper,
 ) : PartyRoomRepository {
 
-    override fun create(partyName: String): Int {
+    override fun create(partyName: String): Long {
         val parameters = mapOf(
             PARTY_ROOM_NAME to partyName,
         )
@@ -26,7 +26,7 @@ internal class PartyRoomRepositoryImpl(
         return jdbcTemplate.queryForObject(
             ADD_PARTY_ROOM_SQL,
             parameters
-        ) { rs, _ -> rs.getInt(PARTY_ROOM_ID) } ?: 0
+        ) { rs, _ -> rs.getLong(PARTY_ROOM_ID) } ?: 0L
     }
 
     override fun addFriend(roomId: Long, friendNickName: String): PartyRoom? {
@@ -61,6 +61,7 @@ internal class PartyRoomRepositoryImpl(
 
     override fun addExpense(roomId: Long, expense: Expense): PartyRoom? {
         val parameters = mapOf(
+            EXPENSE_NAME to expense.name,
             EXPENSE_COST to expense.cost,
             EXPENSE_COUNT to expense.count,
             PARTY_ROOM_ID to roomId,
@@ -126,7 +127,7 @@ internal class PartyRoomRepositoryImpl(
 
     private companion object {
         const val EXPENSE_ID = "expense_id"
-        const val EXPENSE_NAME = "expense_name"
+        const val EXPENSE_NAME = "name"
         const val EXPENSE_COST = "cost"
         const val EXPENSE_COUNT = "count"
         const val FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME = "friend_nick_name"

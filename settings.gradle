@@ -1,3 +1,4 @@
 rootProject.name = 'shareparty'
 
+include ':common'
 include ':common:dto'

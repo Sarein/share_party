@@ -8,8 +8,8 @@ plugins {
 
 group = 'com.partymakers'
 version = '1.0.0-alpha'
-sourceCompatibility = '17'
-targetCompatibility = '17'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 configurations {
 	compileOnly {
@@ -38,6 +38,7 @@ dependencies {
 	implementation("org.postgresql:postgresql:42.7.5")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation project("common:dto")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
@@ -47,16 +48,4 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-compileKotlin {
-	kotlinOptions {
-		jvmTarget = '17'
-	}
-}
-
-compileTestKotlin {
-	kotlinOptions {
-		jvmTarget = '17'
-	}
 }

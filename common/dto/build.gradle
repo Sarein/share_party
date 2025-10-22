@@ -5,6 +5,8 @@ plugins {
 
 group = "com.partymakers"
 version = "1.0.0-alpha"
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 repositories {
     mavenCentral()

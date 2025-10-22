@@ -10,7 +10,7 @@ internal class KickFriendUseCaseImpl(
     private val partyRoomRepository: PartyRoomRepository
 ) : KickFriendUseCase {
 
-    override fun invoke(roomId: Long, nickName: String): PartyRoom? =
+    override fun invoke(roomId: Long, nickName: String): PartyRoom =
         partyRoomRepository.deleteFriend(roomId, nickName)
             ?: throw NotFoundException("Party room or friend does not exist")
 } 
