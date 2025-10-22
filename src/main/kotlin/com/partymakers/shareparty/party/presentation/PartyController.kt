@@ -27,7 +27,7 @@ internal class PartyController(
     private val expenseDtoMapper: ExpenseDtoMapper,
 ) : PartyControllerApiV1 {
 
-    override fun createPartyRoom(@RequestBody request: PartyRoomDescriptionDto): PartyRoomIdDto {
+    override fun createPartyRoom(request: PartyRoomDescriptionDto): PartyRoomIdDto {
         val id = createPartyRoomUseCase(request.name)
         return partyRoomIdDtoMapper.toDto(id)
     }
@@ -37,42 +37,30 @@ internal class PartyController(
         return Content(partiesList)
     }
 
-    override fun inviteFriendToParty(
-        @PathVariable partyId: Long,
-        @RequestBody request: InvitedFriendDescriptionDto
-    ): PartyRoomDto {
+    override fun inviteFriendToParty(partyId: Long, request: InvitedFriendDescriptionDto): PartyRoomDto {
         val partyRoomModel = inviteUseCase(request.nickName, partyId)
         return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    override fun kickFriend(
-        @PathVariable partyId: Long,
-        @RequestBody request: InvitedFriendDescriptionDto
-    ): PartyRoomDto {
-        val partyRoomModel = kickFriendUseCase(partyId, request.nickName)
+    override fun kickFriend(partyId: Long, nickName: String): PartyRoomDto {
+        val partyRoomModel = kickFriendUseCase(partyId, nickName)
         return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    override fun addPartyExpense(
-        @PathVariable partyId: Long,
-        @RequestBody request: ExpenseDto
-    ): PartyRoomDto {
+    override fun addPartyExpense(partyId: Long, request: ExpenseDto): PartyRoomDto {
 
         val expenseModel = expenseDtoMapper.toModel(request)
         val partyRoomModel = addPartyExpenseUseCase(partyId, expenseModel)
         return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    override fun removePartyExpense(
-        @PathVariable partyId: Long,
-        @RequestParam expenseId: Long
-    ): PartyRoomDto {
+    override fun removePartyExpense(partyId: Long, expenseId: Long): PartyRoomDto {
         val partyRoomModel = removePartyExpenseUseCase(partyId, expenseId)
         return partyRoomDtoMapper.toDto(partyRoomModel)
     }
 
-    override fun getParty(@PathVariable partyId: Long): PartyRoomDto? {
+    override fun getParty(partyId: Long): PartyRoomDto? {
         val partyRoomModel = getPartyUseCase(partyId)
-        return  partyRoomModel?.let(partyRoomDtoMapper::toDto)
+        return partyRoomModel?.let(partyRoomDtoMapper::toDto)
     }
 }

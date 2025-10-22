@@ -7,11 +7,12 @@ internal interface PartyRoomRepository {
     fun create(partyName: String): Long
     fun addFriend(roomId: Long, friendNickName: String): PartyRoom?
     fun deleteFriend(roomId: Long, friendNickName: String): PartyRoom?
-    fun addExpense(roomId: Long, expense: Expense): PartyRoom?
-    fun deleteExpense(roomId: Long, expenseId: Long): PartyRoom?
+    fun addExpense(roomId: Long, expense: Expense): Long
+    fun deleteExpense(roomId: Long, expenseId: Long)
     fun findById(roomId: Long): PartyRoom?
     fun findAll(): List<PartyRoom>
     fun deleteById(roomId: Long)
     fun deleteAll()
     fun addFriends(roomId: Long, friendNickNames: List<String>): PartyRoom?
+    fun existsById(id: Long): Boolean
 }

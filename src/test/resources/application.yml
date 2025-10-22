@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/shareparty_test
+    url: jdbc:postgresql://localhost:5432/shareparty
     username: postgres
     password: password
   jpa:

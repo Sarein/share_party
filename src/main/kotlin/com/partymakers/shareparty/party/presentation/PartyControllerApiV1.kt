@@ -32,11 +32,11 @@ internal interface PartyControllerApiV1 {
     @ResponseStatus(HttpStatus.OK)
     fun kickFriend(
         @PathVariable partyId: Long,
-        @RequestBody request: InvitedFriendDescriptionDto
+        @RequestParam nickName: String,
     ): PartyRoomDto?
 
     @PostMapping("/{partyId}/expense")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     fun addPartyExpense(
         @PathVariable partyId: Long,
         @RequestBody request: ExpenseDto

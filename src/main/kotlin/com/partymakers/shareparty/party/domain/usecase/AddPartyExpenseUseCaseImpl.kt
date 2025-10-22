@@ -11,7 +11,13 @@ internal class AddPartyExpenseUseCaseImpl(
     private val repository: PartyRoomRepository
 ) : AddPartyExpenseUseCase {
 
-    override fun invoke(roomId: Long, expense: Expense): PartyRoom =
+    override fun invoke(roomId: Long, expense: Expense): PartyRoom {
+        if(!repository.existsById(roomId)) {
+            throw NotFoundException("Requested room is not exist")
+        }
+
         repository.addExpense(roomId, expense)
-            ?: throw NotFoundException("Requested room is not exist")
-} 
+
+        return repository.findById(roomId) ?: throw NotFoundException("Requested room is not exist")
+    }
+}

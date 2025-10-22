@@ -10,7 +10,15 @@ internal class RemovePartyExpenseUseCaseImpl(
     private val partyRoomRepository: PartyRoomRepository
 ) : RemovePartyExpenseUseCase {
 
-    override fun invoke(partyId: Long, expenseId: Long): PartyRoom =
+    override fun invoke(partyId: Long, expenseId: Long): PartyRoom  {
+        if(!partyRoomRepository.existsById(partyId)) {
+            throw NotFoundException("Requested room is not exist")
+        }
+
         partyRoomRepository.deleteExpense(partyId, expenseId)
-            ?: throw NotFoundException("Requested room is not exist")
+
+        return partyRoomRepository.findById(partyId) ?: throw NotFoundException("Requested room is not exist")
+
+    }
+
 } 
