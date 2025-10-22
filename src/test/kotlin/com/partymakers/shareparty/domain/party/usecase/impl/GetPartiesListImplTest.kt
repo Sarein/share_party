@@ -20,7 +20,7 @@ class GetPartiesListImplTest {
         whenever(repository.findAll()).thenReturn(emptyList())
 
         // when
-        val result = useCase.getParties()
+        val result = useCase()
 
         // then
         assertThat(result).isEmpty()
@@ -37,14 +37,14 @@ class GetPartiesListImplTest {
         whenever(repository.findAll()).thenReturn(partyRooms)
 
         // when
-        val result = useCase.getParties()
+        val result = useCase()
 
         // then
         assertThat(result).hasSize(3)
         assertThat(result).containsExactlyInAnyOrder(
-            PartyRoomDescription(1L, "Party 1"),
-            PartyRoomDescription(2L, "Party 2"),
-            PartyRoomDescription(3L, "Party 3")
+            PartyRoom(1L, "Party 1"),
+            PartyRoom(2L, "Party 2"),
+            PartyRoom(3L, "Party 3")
         )
     }
 } 

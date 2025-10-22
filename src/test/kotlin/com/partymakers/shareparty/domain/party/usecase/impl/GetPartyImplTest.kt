@@ -7,6 +7,7 @@ import com.partymakers.shareparty.party.domain.usecase.GetPartyUseCaseImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.Optional
@@ -21,23 +22,26 @@ class GetPartyImplTest {
         // given
         val partyId = 1L
         val partyRoom = PartyRoom(partyId, "Test Party")
-        whenever(repository.findById(partyId)).thenReturn(Optional.of(partyRoom))
+        whenever(repository.findById(partyId)).thenReturn(partyRoom)
 
         // when
-        val result = useCase.getParty(partyId)
+        val result = useCase(partyId)
 
         // then
         assertThat(result).isEqualTo(partyRoom)
     }
 
     @Test
-    fun `should throw NotFoundException when party room does not exist`() {
+    fun `should return null when it doesnt exists`() {
         // given
         val partyId = 1L
-        whenever(repository.findById(partyId)).thenReturn(Optional.empty())
+        val partyRoom = PartyRoom(partyId, "Test Party")
+        whenever(repository.findById(partyId)).thenReturn(null)
 
-        // when/then
-        assertThatThrownBy { useCase.getParty(partyId) }
-            .isInstanceOf(NotFoundException::class.java)
+        // when
+        val result = useCase(partyId)
+
+        // then
+        assertThat(result).isEqualTo(null)
     }
 } 

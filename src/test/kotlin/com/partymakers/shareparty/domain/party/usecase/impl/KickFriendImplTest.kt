@@ -11,10 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import java.util.*
 
 @ExtendWith(MockitoExtension::class)
 class KickFriendImplTest {
@@ -41,14 +39,13 @@ class KickFriendImplTest {
             name = "Test Party"
         ).copy(friends = setOf(friendToRemove, otherFriend))
 
-        whenever(repository.findById(partyId)).thenReturn(Optional.of(partyRoom))
+        whenever(repository.deleteFriend(partyId, friendToRemove.nickName)).thenReturn(partyRoom)
 
         // when
-        kickFriend.kickFriend(friendToRemove.nickName, partyId)
+        kickFriend.invoke(partyId, friendToRemove.nickName)
 
         // then
-        verify(repository).findById(partyId)
-        verify(repository).save(any())
+        verify(repository).deleteFriend(partyId, friendToRemove.nickName)
         verifyNoMoreInteractions(repository)
     }
 
@@ -66,14 +63,13 @@ class KickFriendImplTest {
             name = "Test Party"
         ).copy(friends = setOf(friendToRemove))
 
-        whenever(repository.findById(partyId)).thenReturn(Optional.of(partyRoom))
+        whenever(repository.deleteFriend(partyId, "friend1")).thenReturn(partyRoom)
 
         // when
-        kickFriend.kickFriend("friend1", partyId)
+        kickFriend.invoke(partyId, "friend1")
 
         // then
-        verify(repository).findById(partyId)
-        verify(repository).save(any())
+        verify(repository).deleteFriend(partyId, "friend1")
         verifyNoMoreInteractions(repository)
     }
 
@@ -82,14 +78,14 @@ class KickFriendImplTest {
         // given
         val partyId = 1L
         val nickName = "friend1"
-        whenever(repository.findById(partyId)).thenReturn(Optional.empty())
+        whenever(repository.deleteFriend(partyId, nickName)).thenReturn(null)
 
         // when/then
         assertThrows<NotFoundException> {
-            kickFriend.kickFriend(nickName, partyId)
+            kickFriend.invoke(partyId, nickName)
         }
 
-        verify(repository).findById(partyId)
+        verify(repository).deleteFriend(partyId, nickName)
         verifyNoMoreInteractions(repository)
     }
 } 

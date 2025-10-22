@@ -13,10 +13,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.junit.jupiter.MockitoExtension
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
 import org.mockito.kotlin.whenever
-import java.util.Optional
 
 @ExtendWith(MockitoExtension::class)
 class AddPartyExpenseImplTest {
@@ -35,6 +32,7 @@ class AddPartyExpenseImplTest {
         // given
         val partyId = 1L
         val expense = Expense(
+            id = null,
             name = "Test Expense",
             cost = 100,
             count = 1.0
@@ -43,17 +41,14 @@ class AddPartyExpenseImplTest {
             id = partyId,
             name = "Test Party"
         )
-        val updatedPartyRoom = partyRoom.copy(expenses = listOf(expense))
 
-        whenever(repository.findById(partyId)).thenReturn(Optional.of(partyRoom))
-        whenever(repository.save(any())).thenReturn(updatedPartyRoom)
+        whenever(repository.addExpense(partyId, expense)).thenReturn(partyRoom)
 
         // when
-        addPartyExpense.addPartyExpense(expense, partyId)
+        addPartyExpense.invoke(partyId, expense)
 
         // then
-        verify(repository).findById(partyId)
-        verify(repository).save(argThat { expenses.contains(expense) })
+        verify(repository).addExpense(partyId, expense)
     }
 
     @Test
@@ -61,19 +56,20 @@ class AddPartyExpenseImplTest {
         // given
         val partyId = 1L
         val expense = Expense(
+            id = null,
             name = "Test Expense",
             cost = 100,
             count = 1.0
         )
 
-        whenever(repository.findById(partyId)).thenReturn(Optional.empty())
+        whenever(repository.addExpense(partyId, expense)).thenReturn(null)
 
         // when/then
         assertThrows<NotFoundException> {
-            addPartyExpense.addPartyExpense(expense, partyId)
+            addPartyExpense.invoke(partyId, expense)
         }
 
-        verify(repository).findById(partyId)
+        verify(repository).addExpense(partyId, expense)
         verifyNoMoreInteractions(repository)
     }
 } 
