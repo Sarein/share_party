@@ -1,8 +1,8 @@
 package com.partymakers.shareparty.application.party
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.partymakers.shareparty.party.presentation.dto.Expense
-import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescription
+import com.partymakers.shareparty.party.presentation.dto.ExpenseDto
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescriptionDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -28,7 +28,7 @@ class PartyControllerExpenseTest {
         // given
         val partyName = "Test Party"
         val partyId = createParty(partyName)
-        val expense = Expense("Pizza", 1000, 1.0)
+        val expense = ExpenseDto(id = "1","Pizza", 1000, 1.0)
 
         // when/then
         mockMvc.post("/api/v1/party/$partyId/expense") {
@@ -61,8 +61,8 @@ class PartyControllerExpenseTest {
         // given
         val partyName = "Test Party"
         val partyId = createParty(partyName)
-        val expense1 = Expense("Pizza", 1000, 1.0)
-        val expense2 = Expense("Beer", 500, 2.0)
+        val expense1 = ExpenseDto(id = "1", name = "Pizza", 1000, 1.0)
+        val expense2 = ExpenseDto(id = "2","Beer", 500, 2.0)
 
         // Add expenses
         addExpense(partyId, expense1)
@@ -79,11 +79,13 @@ class PartyControllerExpenseTest {
                     {
                         "expenses": [
                             {
+                                "id": "1",
                                 "name": "Pizza",
                                 "cost": 1000,
                                 "count": 1.0
                             },
                             {
+                                "id": "2",
                                 "name": "Beer",
                                 "cost": 500,
                                 "count": 2.0
@@ -101,7 +103,7 @@ class PartyControllerExpenseTest {
         // given
         val partyName = "Test Party"
         val partyId = createParty(partyName)
-        val expense = Expense("Pizza", 1000, 1.0)
+        val expense = ExpenseDto(id = null,"Pizza", 1000, 1.0)
         addExpense(partyId, expense)
 
         // when/then
@@ -117,7 +119,7 @@ class PartyControllerExpenseTest {
     fun `should return 404 when party not found for adding expense`() {
         // given
         val nonExistentPartyId = 999L
-        val expense = Expense("Pizza", 1000, 1.0)
+        val expense = ExpenseDto(id = null,"Pizza", 1000, 1.0)
 
         // when/then
         mockMvc.post("/api/v1/party/$nonExistentPartyId/expense") {
@@ -145,7 +147,7 @@ class PartyControllerExpenseTest {
     fun `should return 404 when party not found for removing expense`() {
         // given
         val nonExistentPartyId = 999L
-        val expense = Expense("Pizza", 1000, 1.0)
+        val expense = ExpenseDto(null,  "Pizza", 1000, 1.0)
 
         // when/then
         mockMvc.delete("/api/v1/party/$nonExistentPartyId/expense") {
@@ -157,7 +159,7 @@ class PartyControllerExpenseTest {
     }
 
     private fun createParty(name: String): Long {
-        val request = PartyRoomDescription(name)
+        val request = PartyRoomDescriptionDto(name)
         val response = mockMvc.post("/api/v1/party") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(request)
@@ -168,7 +170,7 @@ class PartyControllerExpenseTest {
             ?: throw IllegalStateException("Party ID not found in response")
     }
 
-    private fun addExpense(partyId: Long, expense: Expense) {
+    private fun addExpense(partyId: Long, expense: ExpenseDto) {
         mockMvc.post("/api/v1/party/$partyId/expense") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(expense)

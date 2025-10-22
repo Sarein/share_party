@@ -2,8 +2,8 @@ package com.partymakers.shareparty.application.party
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.partymakers.shareparty.friends.presentation.dto.FriendDescription
-import com.partymakers.shareparty.party.presentation.dto.InvitedFriendDescription
-import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescription
+import com.partymakers.shareparty.party.presentation.dto.InvitedFriendDescriptionDto
+import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescriptionDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -100,7 +100,7 @@ class PartyControllerFriendsTest {
         val partyId = createParty(partyName)
         createFriend("testFriend", "Test Friend", "test@test.com")
 
-        val request = InvitedFriendDescription("testFriend")
+        val request = InvitedFriendDescriptionDto("testFriend")
 
         // when/then
         mockMvc.post("/api/v1/party/$partyId/friend") {
@@ -116,7 +116,7 @@ class PartyControllerFriendsTest {
         // given
         val partyName = "Test Party"
         val partyId = createParty(partyName)
-        val request = InvitedFriendDescription("nonExistentFriend")
+        val request = InvitedFriendDescriptionDto("nonExistentFriend")
 
         // when/then
         mockMvc.post("/api/v1/party/$partyId/friend") {
@@ -137,20 +137,20 @@ class PartyControllerFriendsTest {
         // First invitation
         mockMvc.post("/api/v1/party/$partyId/friend") {
             contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(InvitedFriendDescription("testFriend"))
+            content = objectMapper.writeValueAsString(InvitedFriendDescriptionDto("testFriend"))
         }
 
         // when/then - Second invitation
         mockMvc.post("/api/v1/party/$partyId/friend") {
             contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(InvitedFriendDescription("testFriend"))
+            content = objectMapper.writeValueAsString(InvitedFriendDescriptionDto("testFriend"))
         }.andExpect {
             status { isAlreadyReported() }
         }
     }
 
     private fun createParty(name: String): Long {
-        val request = PartyRoomDescription(name)
+        val request = PartyRoomDescriptionDto(name)
         val response = mockMvc.post("/api/v1/party") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(request)
@@ -170,7 +170,7 @@ class PartyControllerFriendsTest {
     }
 
     private fun inviteFriend(partyId: Long, nickName: String) {
-        val request = InvitedFriendDescription(nickName)
+        val request = InvitedFriendDescriptionDto(nickName)
         mockMvc.post("/api/v1/party/$partyId/friend") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(request)
