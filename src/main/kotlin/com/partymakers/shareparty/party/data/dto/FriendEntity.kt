@@ -8,6 +8,6 @@ internal data class FriendEntity(
     @JsonProperty("name")
     val name: String,
     @JsonProperty("e_mail")
-    var eMail: String? = null,
+    var mail: String? = null,
 )
 

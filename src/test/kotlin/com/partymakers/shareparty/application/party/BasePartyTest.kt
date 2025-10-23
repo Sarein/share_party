@@ -1,10 +1,10 @@
 package com.partymakers.shareparty.application.party
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.partymakers.shareparty.party.domain.entity.Expense
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
-import com.partymakers.shareparty.party.presentation.PartyControllerApiV1
+import com.partymakers.shareparty.party.presentation.PartyApiV1
 import com.partymakers.shareparty.party.presentation.dto.ExpenseDto
+import com.partymakers.shareparty.party.presentation.dto.InvitedFriendDescriptionDto
 import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescriptionDto
 import com.partymakers.shareparty.party.presentation.dto.PartyRoomDto
 import com.partymakers.shareparty.party.presentation.dto.PartyRoomIdDto
@@ -39,7 +39,7 @@ class BasePartyTest {
     }
 
     internal fun addExpense(partyId: Long, expense: ExpenseDto): PartyRoomDto {
-        val resultString = mockMvc.post("${PartyControllerApiV1.PARTY_BASE_URL}/$partyId/expense") {
+        val resultString = mockMvc.post("${PartyApiV1.PARTY_BASE_URL}/$partyId/expense") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(expense)
         }.andExpect {
@@ -52,7 +52,7 @@ class BasePartyTest {
     }
 
     internal fun getPartyRoom(partyId: Long): PartyRoomDto {
-        val resultString = mockMvc.get("${PartyControllerApiV1.PARTY_BASE_URL}/$partyId") {
+        val resultString = mockMvc.get("${PartyApiV1.PARTY_BASE_URL}/$partyId") {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
@@ -64,9 +64,9 @@ class BasePartyTest {
     }
 
     internal fun deleteExpense(partyId: Long, expense: Long): PartyRoomDto {
-        val resultString = mockMvc.delete("${PartyControllerApiV1.PARTY_BASE_URL}/$partyId/expense") {
+        val resultString = mockMvc.delete("${PartyApiV1.PARTY_BASE_URL}/$partyId/expense") {
             contentType = MediaType.APPLICATION_JSON
-            param("expenseId",expense.toString())
+            param("expenseId", expense.toString())
         }.andExpect {
             status { isOk() }
         }.andReturn()
@@ -77,7 +77,7 @@ class BasePartyTest {
     }
 
     internal fun createParty(name: String): Long {
-        val response = mockMvc.post("${PartyControllerApiV1.PARTY_BASE_URL}"){
+        val response = mockMvc.post("${PartyApiV1.PARTY_BASE_URL}") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(PartyRoomDescriptionDto(name))
         }
@@ -90,5 +90,23 @@ class BasePartyTest {
 
         val responseValue = objectMapper.readValue(response, PartyRoomIdDto::class.java)
         return responseValue.id
+    }
+
+    internal fun inviteFriend(partyId: Long, nickName: String) {
+        mockMvc.post("${PartyApiV1.PARTY_BASE_URL}/$partyId/friend") {
+            contentType = MediaType.APPLICATION_JSON
+            param("nickName", nickName)
+        }.andExpect {
+            status { isOk() }
+        }
+    }
+
+    internal fun removeFriend(partyId: Long, nickName: String) {
+        mockMvc.delete("${PartyApiV1.PARTY_BASE_URL}/$partyId/friend") {
+            contentType = MediaType.APPLICATION_JSON
+            param("nickName", nickName)
+        }.andExpect {
+            status { isOk() }
+        }
     }
 }

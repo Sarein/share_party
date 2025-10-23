@@ -7,11 +7,10 @@ import com.partymakers.shareparty.party.domain.exception.NotFoundException
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import com.partymakers.shareparty.party.domain.usecase.AddPartyExpenseUseCaseImpl
 import org.junit.Assert.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.whenever
@@ -19,14 +18,8 @@ import org.mockito.kotlin.whenever
 @ExtendWith(MockitoExtension::class)
 class AddPartyExpenseImplTest {
 
-    @Mock
-    private lateinit var repository: PartyRoomRepository
-    private lateinit var addPartyExpense: AddPartyExpenseUseCaseImpl
-
-    @BeforeEach
-    fun setup() {
-        addPartyExpense = AddPartyExpenseUseCaseImpl(repository)
-    }
+    private val repository: PartyRoomRepository = mock()
+    private val addPartyExpense = AddPartyExpenseUseCaseImpl(repository)
 
     @Test
     fun `should add expense to party room`() {

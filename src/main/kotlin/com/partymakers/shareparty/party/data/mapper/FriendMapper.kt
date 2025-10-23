@@ -11,6 +11,6 @@ internal class FriendMapper {
         Friend(
             nickName = dto.nickName,
             name = dto.name,
-            eMail = dto.eMail ?: "",
+            mail = dto.mail ?: "",
         )
 }

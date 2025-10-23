@@ -7,10 +7,16 @@ import org.springframework.stereotype.Service
 
 @Service
 internal class KickFriendUseCaseImpl(
-    private val partyRoomRepository: PartyRoomRepository
+    private val repository: PartyRoomRepository
 ) : KickFriendUseCase {
 
-    override fun invoke(roomId: Long, nickName: String): PartyRoom =
-        partyRoomRepository.deleteFriend(roomId, nickName)
-            ?: throw NotFoundException("Party room or friend does not exist")
-} 
+    override fun invoke(roomId: Long, nickName: String): PartyRoom {
+        if(!repository.existsById(roomId)) {
+            throw NotFoundException("Requested room is not exist")
+        }
+
+        repository.deleteFriend(roomId, nickName)
+
+        return repository.findById(roomId) ?: throw NotFoundException("Requested room is not exist")
+    }
+}

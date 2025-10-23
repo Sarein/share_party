@@ -2,14 +2,15 @@ package com.partymakers.shareparty.domain.party.usecase.impl
 
 import com.partymakers.shareparty.friends.domain.entity.Friend
 import com.partymakers.shareparty.party.domain.entity.PartyRoom
-import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
+import com.partymakers.shareparty.party.domain.entity.PartyRoomDescription
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
+import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import com.partymakers.shareparty.party.domain.usecase.KickFriendUseCaseImpl
+import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -18,74 +19,64 @@ import org.mockito.kotlin.whenever
 class KickFriendImplTest {
 
     private val repository: PartyRoomRepository = mock()
-    private val kickFriend: KickFriendUseCaseImpl = KickFriendUseCaseImpl(repository)
+    private val kickFriendUseCase = KickFriendUseCaseImpl(repository)
+
+    private val name1 = "Иван Иванов"
+    private val nickName1 = "ivan_ivanov"
+    private val eMail1 = "ivan@example.com"
+    private val name2 = "Петр Петров"
+    private val nickName2 = "petr_petrov"
+    private val eMail2 = "petr@example.com"
+    private val partyId = 1L
+    private val friend1 = Friend(
+        name = name1,
+        nickName = nickName1,
+        mail = eMail1,
+    )
+    private val friend2 = Friend(
+        name = name2,
+        nickName = nickName2,
+        mail = eMail2,
+    )
+
+    private val partyRoom = PartyRoom(
+        description = PartyRoomDescription(partyId, "name"),
+        friends = setOf(friend1, friend2)
+    )
+
 
     @Test
-    fun `should remove friend from party room`() {
-        // given
-        val partyId = 1L
-        val friendToRemove = Friend(
-            name = "Friend To Remove",
-            nickName = "friend1",
-            eMail = "friend1@example.com"
-        )
-        val otherFriend = Friend(
-            name = "Other Friend",
-            nickName = "friend2",
-            eMail = "friend2@example.com"
-        )
-        val partyRoom = PartyRoom(
-            id = partyId,
-            name = "Test Party"
-        ).copy(friends = setOf(friendToRemove, otherFriend))
-
-        whenever(repository.deleteFriend(partyId, friendToRemove.nickName)).thenReturn(partyRoom)
+    fun `kick friend to party EXPECT call repository`() {
+        whenever(repository.existsById(partyId)).thenReturn(true)
+        whenever(repository.findById(partyId)).thenReturn(partyRoom)
 
         // when
-        kickFriend.invoke(partyId, friendToRemove.nickName)
+        kickFriendUseCase(partyId, nickName1)
 
         // then
-        verify(repository).deleteFriend(partyId, friendToRemove.nickName)
-        verifyNoMoreInteractions(repository)
+        verify(repository).deleteFriend(partyId, nickName1)
     }
 
     @Test
-    fun `should remove friend case-insensitively`() {
-        // given
-        val partyId = 1L
-        val friendToRemove = Friend(
-            name = "Friend To Remove",
-            nickName = "Friend1",
-            eMail = "friend1@example.com"
-        )
-        val partyRoom = PartyRoom(
-            id = partyId,
-            name = "Test Party"
-        ).copy(friends = setOf(friendToRemove))
-
-        whenever(repository.deleteFriend(partyId, "friend1")).thenReturn(partyRoom)
+    fun `kick friend to party room EXPECT return it`() {
+        whenever(repository.existsById(partyId)).thenReturn(true)
+        whenever(repository.findById(partyId)).thenReturn(partyRoom)
 
         // when
-        kickFriend.invoke(partyId, "friend1")
+        val result = kickFriendUseCase(partyId, nickName1)
 
-        // then
-        verify(repository).deleteFriend(partyId, "friend1")
-        verifyNoMoreInteractions(repository)
+
+        assertEquals(partyRoom,  result)
     }
 
     @Test
-    fun `should throw NotFoundException when party room not found`() {
-        // given
-        val partyId = 1L
-        val nickName = "friend1"
-        whenever(repository.deleteFriend(partyId, nickName)).thenReturn(null)
+    fun `party room doesn't exist EXPECT throw NotFoundException`() {
+        whenever(repository.existsById(partyId)).thenReturn(true)
+        whenever(repository.findById(partyId)).thenReturn(null)
 
         // when/then
         assertThrows<NotFoundException> {
-            kickFriend.invoke(partyId, nickName)
+            kickFriendUseCase(partyId, nickName1)
         }
-
-        verify(repository).deleteFriend(partyId, nickName)
-        verifyNoMoreInteractions(repository)
     }
 } 

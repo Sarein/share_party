@@ -1,0 +1,3 @@
+TRUNCATE expenses CASCADE;
+TRUNCATE friends CASCADE;
+TRUNCATE party_room CASCADE;

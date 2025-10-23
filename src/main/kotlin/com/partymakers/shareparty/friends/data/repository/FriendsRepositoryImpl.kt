@@ -15,7 +15,7 @@ class FriendsRepositoryImpl(
         val values = mapOf(
             NAME to friend.name,
             NICK_NAME to friend.nickName,
-            E_MAIL to friend.eMail,
+            E_MAIL to friend.mail,
         )
 
         return jdbcTemplate.queryForObject(UPDATE_FRIENDS_SQL, values, rowToFriendsMapper)
@@ -29,6 +29,10 @@ class FriendsRepositoryImpl(
         return jdbcTemplate.queryForObject(FIND_FRIENDS_BY_NICK_NAME_SQL, values, rowToFriendsMapper)
     }
 
+    override fun deleteAll() {
+        jdbcTemplate.update(DELETE_ALL_FRIENDS_SQL, emptyMap<String, Unit>())
+    }
+
     private companion object {
         private const val NAME = "name"
         private const val NICK_NAME = "nick_name"
@@ -36,15 +40,16 @@ class FriendsRepositoryImpl(
 
         val rowToFriendsMapper = RowMapper { rs, _ ->
             Friend(
-                nickName = rs.getString(NAME),
-                name = rs.getString(NICK_NAME),
-                eMail = rs.getString(E_MAIL),
+                nickName = rs.getString(NICK_NAME),
+                name = rs.getString(NAME),
+                mail = rs.getString(E_MAIL),
             )
         }
 
         const val UPDATE_FRIENDS_SQL = """
             INSERT INTO friends ($NAME, $NICK_NAME, $E_MAIL)
             VALUES (:$NAME, :$NICK_NAME, :$E_MAIL)
+            ON CONFLICT (nick_name) DO NOTHING
             RETURNING *
         """
 
@@ -52,7 +57,11 @@ class FriendsRepositoryImpl(
             SELECT *
             FROM friends
             WHERE $NICK_NAME=:$NICK_NAME
-            LIMIT 1
+            LIMIT 1        
         """
+
+        val DELETE_ALL_FRIENDS_SQL = """
+            DELETE FROM friends  
+        """.trimIndent()
     }
 }

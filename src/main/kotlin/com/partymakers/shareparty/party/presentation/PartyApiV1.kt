@@ -2,16 +2,14 @@ package com.partymakers.shareparty.party.presentation
 
 import com.partymakers.common.dto.Content
 import com.partymakers.shareparty.party.presentation.dto.ExpenseDto
-import com.partymakers.shareparty.party.presentation.dto.InvitedFriendDescriptionDto
 import com.partymakers.shareparty.party.presentation.dto.PartyRoomDescriptionDto
 import com.partymakers.shareparty.party.presentation.dto.PartyRoomDto
 import com.partymakers.shareparty.party.presentation.dto.PartyRoomIdDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.bind.annotation.PostMapping
 
 
-internal interface PartyControllerApiV1 {
+internal interface PartyApiV1 {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,7 +23,7 @@ internal interface PartyControllerApiV1 {
     @ResponseStatus(HttpStatus.OK)
     fun inviteFriendToParty(
         @PathVariable partyId: Long,
-        @RequestBody request: InvitedFriendDescriptionDto
+        @RequestParam nickName: String,
     ): PartyRoomDto
 
     @DeleteMapping("/{partyId}/friend")
@@ -55,6 +53,7 @@ internal interface PartyControllerApiV1 {
 
 
     companion object {
+
         const val PARTY_BASE_URL = "/v1/party"
     }
 }

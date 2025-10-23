@@ -31,32 +31,22 @@ internal class PartyRoomRepositoryImpl(
         ) { rs, _ -> rs.getLong(PARTY_ROOM_ID) } ?: 0L
     }
 
-    override fun addFriend(roomId: Long, friendNickName: String): PartyRoom? {
-        if (findById(roomId) == null) {
-            throw NotFoundException("Room id: ${roomId} does not exist")
-        }
-
+    override fun addFriend(roomId: Long, friendNickName: String) {
         val parameters = mapOf(
             FRIENDS_PARTY_ROOM_ROOM_ID to roomId,
             FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME to friendNickName,
         )
 
-        val dto = jdbcTemplate.queryForObject(ADD_FRIEND_SQL, parameters, rowToPartyRoomMapper)
-        return dto?.let { partyRoomMapper.toEntity(it) }
+        jdbcTemplate.update(ADD_FRIEND_SQL, parameters)
     }
 
-    override fun deleteFriend(roomId: Long, friendNickName: String): PartyRoom? {
-        if (findById(roomId) == null) {
-            throw NotFoundException("Room id: ${roomId} does not exist")
-        }
-
+    override fun deleteFriend(roomId: Long, friendNickName: String) {
         val parameters = mapOf(
             FRIENDS_PARTY_ROOM_ROOM_ID to roomId,
             FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME to friendNickName,
         )
 
-        val dto = jdbcTemplate.queryForObject(DELETE_FRIEND_SQL, parameters, rowToPartyRoomMapper)
-        return dto?.let { partyRoomMapper.toEntity(it) }
+        jdbcTemplate.update(DELETE_FRIEND_SQL, parameters)
     }
 
     override fun addFriends(roomId: Long, friendNickNames: List<String>): PartyRoom? {
@@ -110,7 +100,10 @@ internal class PartyRoomRepositoryImpl(
 
         val dto = jdbcTemplate.query(GET_PARTY_ROOM_BY_ID_SQL, parameters, rowToPartyRoomMapper).firstOrNull()
 
-        return dto?.let { partyRoomMapper.toEntity(it) }
+        return dto?.let {
+           val entutu =  partyRoomMapper.toEntity(it)
+            entutu
+        }
     }
 
     val rowToPartyRoomMapper = RowMapper { rs, _ ->
@@ -170,34 +163,10 @@ internal class PartyRoomRepositoryImpl(
                 WHERE room_id = :$PARTY_ROOM_ID and expense_id = :$EXPENSE_ID
         """.trimIndent()
 
-        val ADD_FRIEND_SQL = """
-            WITH add_friend AS (
-                INSERT INTO party_room_friends (party_room_id, friend_nick_name)
-                VALUES (:$FRIENDS_PARTY_ROOM_ROOM_ID, :$FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME)
-                ON CONFLICT DO NOTHING
-                RETURNING room_id
-            )
-            SELECT
-                pr.room_id,
-                pr.name,
-                (SELECT COALESCE(json_agg(room_friends), '[]'::json)
-                FROM party_room_friends prf
-                JOIN friends room_friends
-                    ON prf.friend_nick_name = room_friends.nick_name
-                WHERE prf.party_room_id = pr.room_id) as friends,
-                (SELECT COALESCE(json_agg(room_expenses), '[]'::json)
-                FROM (
-                    SELECT
-                        e.expense_id,
-                        e.name,
-                        e.cost,
-                        e.count
-                    FROM expenses e
-                    WHERE e.room_id = pr.room_id
-                ) as room_expenses) as expenses
-            FROM party_room as pr
-            WHERE
-                pr.room_id = (SELECT room_id FROM add_friend)
+        val ADD_FRIEND_SQL = """           
+             INSERT INTO party_room_friends (party_room_id, friend_nick_name)
+             VALUES (:$FRIENDS_PARTY_ROOM_ROOM_ID, :$FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME)
+             ON CONFLICT DO NOTHING         
         """.trimIndent()
 
         val ADD_FRIENDS_SQL = """
@@ -290,32 +259,10 @@ internal class PartyRoomRepositoryImpl(
         """.trimIndent()
 
         val DELETE_FRIEND_SQL = """        
-                DELETE FROM party_room_friends 
-                WHERE party_room_id = :$FRIENDS_PARTY_ROOM_ROOM_ID AND friend_nick_name = :$FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME
-                RETURNING room_id
-            )
-            SELECT
-                pr.room_id,
-                pr.name,
-                (SELECT COALESCE(json_agg(room_friends), '[]'::json)
-                FROM party_room_friends prf
-                JOIN friends room_friends
-                    ON prf.friend_nick_name = room_friends.nick_name
-                WHERE prf.party_room_id = pr.room_id) as friends,
-                (SELECT COALESCE(json_agg(room_expenses), '[]'::json)
-                FROM (
-                    SELECT
-                        e.expense_id,
-                        e.name,
-                        e.cost,
-                        e.count
-                    FROM expenses e
-                    WHERE e.room_id = pr.room_id
-                ) as room_expenses) as expenses
-            FROM party_room as pr
-            WHERE
-                pr.room_id = (SELECT room_id FROM delete_friend)
+            DELETE FROM party_room_friends 
+            WHERE party_room_id = :$FRIENDS_PARTY_ROOM_ROOM_ID AND friend_nick_name = :$FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME                 
         """.trimIndent()
+    //AND EXISTS (SELECT 1 FROM party_room_friends WHERE friend_nick_name = :$FRIENDS_PARTY_ROOM_FRIEND_NICK_NAME)
 
         const val EXISTS_BY_ID_SQL = """
             SELECT EXISTS(SELECT 1
