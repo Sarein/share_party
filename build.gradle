@@ -40,7 +40,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation project("common:dto")
 	annotationProcessor("org.projectlombok:lombok")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("junit:junit")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
