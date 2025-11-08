@@ -4,7 +4,7 @@ import com.partymakers.shareparty.party.domain.entity.PartyRoom
 import com.partymakers.shareparty.party.domain.exception.NotFoundException
 import com.partymakers.shareparty.party.domain.repository.PartyRoomRepository
 import com.partymakers.shareparty.party.domain.usecase.RemovePartyExpenseUseCaseImpl
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,6 +25,7 @@ class RemovePartyExpenseImplTest {
         val expenseId = 1L
         val partyRoom: PartyRoom = mock()
 
+        whenever(repository.existsById(partyId)).thenReturn(true)
         whenever(repository.findById(partyId)).thenReturn(partyRoom)
 
         // when
