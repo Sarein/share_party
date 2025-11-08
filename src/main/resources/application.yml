@@ -19,3 +19,11 @@ spring:
     change-log: classpath:/db/db.changelog-master.xml
   main:
     allow-bean-definition-overriding: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha

@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.rustore.commons.dto.DefaultResponseDto
+import org.springframework.web.bind.annotation.ControllerAdvice
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = ["com.partymakers.shareparty.party", "com.partymakers.shareparty.friends"])
 internal class SharePartyExceptionHandler {
 
     @ExceptionHandler(AlreadyExistException::class)
