@@ -1,7 +1,7 @@
 # ShareParty
 
-[![Tests](https://github.com/Sarein/share_party/actions/workflows/tests.yml/badge.svg)](https://github.com/Sarein/share_party/actions/workflows/tests.yml)
-[![Build](https://github.com/Sarein/share_party/actions/workflows/Build%20Application/badge.svg)](https://github.com/Sarein/share_party/actions/workflows/build.yml)
+[![Run Tests](https://github.com/Sarein/share_party/actions/workflows/tests.yml/badge.svg)](https://github.com/Sarein/share_party/actions/workflows/tests.yml)
+[![Build Application](https://github.com/Sarein/share_party/actions/workflows/build.yml/badge.svg)](https://github.com/Sarein/share_party/actions/workflows/build.yml)
 
 Веб-приложение для управления вечеринками и расходами на них.
 
