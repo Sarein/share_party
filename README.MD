@@ -15,12 +15,12 @@ ShareParty - это Spring Boot приложение на Kotlin, которое
 - **Backend**: Spring Boot 3.4.4, Kotlin
 - **База данных**: PostgreSQL 14
 - **Миграции**: Liquibase
-- **API документация**: Swagger UI
+- **API документация**: Swagger UI (SpringDoc 2.8.4)
 - **Сборка**: Gradle
 
 ## Требования
 
-- Java 17 или выше
+- **Java 21** (рекомендуется) или Java 17+
 - PostgreSQL 14
 - Gradle (включен в проект)
 
